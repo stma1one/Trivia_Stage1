@@ -41,7 +41,9 @@ namespace Trivia_Stage1.UI
                 string email = Console.ReadLine();
                 while (!IsEmailValid(email))
                 {
+                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("Bad Email Format! Please try again:");
+                    Console.ResetColor();
                     email = Console.ReadLine();
                 }
 
@@ -49,7 +51,9 @@ namespace Trivia_Stage1.UI
                 string password = Console.ReadLine();
                 while (!IsPasswordValid(password))
                 {
+                 Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("password must be at least 4 characters! Please try again: ");
+                    Console.ResetColor();
                     password = Console.ReadLine();
                 }
 
@@ -57,12 +61,15 @@ namespace Trivia_Stage1.UI
                 string name = Console.ReadLine();
                 while (!IsNameValid(name))
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("name must be at least 3 characters! Please try again: ");
+                    Console.ResetColor();
                     name = Console.ReadLine();
                 }
 
-
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine("Connecting to Server...");
+                Console.ResetColor();
                 /* Create instance of Business Logic and call the signup method
                  * For example:
                 try
@@ -72,7 +79,9 @@ namespace Trivia_Stage1.UI
                 }
                 catch (Exception ex)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Failed to signup! Email may already exist in DB!");
+                    Console.ResetColor();
                 }
                 
                 */
