@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Trivia_Stage1.Models;
 
 namespace Trivia_Stage1.UI
 {
@@ -13,6 +15,8 @@ namespace Trivia_Stage1.UI
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
 
+
+        private DbContext db = new TriviaDbContext();
 
         //Implememnt interface here
         public bool ShowLogin()
@@ -93,7 +97,7 @@ namespace Trivia_Stage1.UI
             //return true if signup suceeded!
             return (false);
         }
-
+        //איתמר
         public void ShowAddQuestion()
         {
             Console.WriteLine("Not implemented yet! Press any key to continue...");
@@ -105,13 +109,14 @@ namespace Trivia_Stage1.UI
             Console.WriteLine("Not implemented yet! Press any key to continue...");
             Console.ReadKey(true);
         }
+        //איתמר
         public void ShowGame()
         {
             Console.WriteLine("Not implemented yet! Press any key to continue...");
             Console.ReadKey(true);
         }
         public void ShowProfile()
-        {
+        { 
             Console.WriteLine("Not implemented yet! Press any key to continue...");
             Console.ReadKey(true);
         }
