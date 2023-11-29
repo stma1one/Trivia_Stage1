@@ -66,8 +66,15 @@ VALUES ('How many jews did Hitler kill during the holocaust ?', '6 million', '5 
 INSERT INTO Questions (text, rightAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3, userId, subjectId)
 VALUES ('Who is the current president of the USA ?', 'Joe Biden', 'Donald J Trump', 'Barak Obama', 'George Washington', 1, 2)
 INSERT INTO Questions (text, rightAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3, userId, subjectId)
-VALUES ('How many classes are there in 11th grade in Ramon High School', '6', '5', '7', '8', 1, 5)
+VALUES ('Who holds the current world record for the fastest 100 meters run ?', 'Usain Bolt', 'Tyson Gay', 'Yohan Blake', 'Asafa Powell', 1, 1)
 INSERT INTO Questions (text, rightAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3, userId, subjectId)
-VALUES ('How many classes are there in 11th grade in Ramon High School', '6', '5', '7', '8', 1, 5)
-
+VALUES ('How many elements are in the periodic table ?', '118', '120', '125', '112', 1, 4)
+INSERT INTO Statuses (currentStatus)
+VALUES ('Approved')
+INSERT INTO Statuses (currentStatus)
+VALUES ('Pending')
+INSERT INTO Statuses (currentStatus)
+VALUES ('Denied')
+UPDATE Questions SET [statusId] = 1
+WHERE userId = 1
 
