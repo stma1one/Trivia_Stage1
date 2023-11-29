@@ -51,7 +51,7 @@ namespace Trivia_Stage1.UI
                 while (!IsPasswordValid(password))
                 {
                     Console.ForegroundColor= ConsoleColor.Red;  
-                    Console.Write("password must be at least 4 characters! Please try again: ");
+                    Console.Write("password must be at least 8 characters! Please try again: ");
                     Console.ResetColor();   
                     password = Console.ReadLine();
                 }
@@ -61,7 +61,7 @@ namespace Trivia_Stage1.UI
                 while (!IsNameValid(name))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("name must be at least 3 characters! Please try again: ");
+                    Console.Write("name must be at least 2 characters! Please try again: ");
                     Console.ResetColor();
                     name = Console.ReadLine();
                 }
@@ -136,37 +136,18 @@ namespace Trivia_Stage1.UI
 
             var regex = new Regex(pattern);
             return regex.IsMatch(emailAddress);
-
-        //another option is using .net System.Net.Mail library which has an EmailAddress class that stores email
-        //we can use it to validate the structure of the email:
-       // https://learn.microsoft.com/en-us/dotnet/api/system.net.mail.mailaddress?view=net-7.0
-            /*
-             * try
-             * {
-             *     //try to create MailAddress objcect from the email address string
-             *      var email=new MailAddress(emailAddress);
-             *      //if success
-             *      return true;
-             * }
-             *      //if it throws a formatExcpetion then the string is not email format.
-             * catch (Exception ex)
-             * {
-             * return false;
-             * }
-             */
-
         }
 
 
 
         private bool IsPasswordValid(string password)
         {
-            return !string.IsNullOrEmpty(password) && password.Length >= 3;
+            return !string.IsNullOrEmpty(password) && password.Length >= 8;
         }
 
         private bool IsNameValid(string name)
         {
-            return !string.IsNullOrEmpty(name) && name.Length >= 3;
+            return !string.IsNullOrEmpty(name) && name.Length >= 2;
         }
     }
 }
