@@ -1,4 +1,5 @@
 CREATE DATABASE Trivia;
+USE Trivia;
 CREATE TABLE Ranks(
 	rankid int IDENTITY (1, 1) PRIMARY KEY,
 	rankName nvarchar(255)
@@ -40,7 +41,7 @@ CREATE TABLE Questions(
 	REFERENCES Subjects(id)
 	)
 INSERT INTO Users (email, pswrd, username, points, questionsadded)
-VALUES ('talkazyo@gmail.com', '1234', 'ro', 0, 0)
+VALUES ('talkazyo@gmail.com', '12345678', 'ro', 0, 5)
 INSERT INTO Ranks(rankName)
 VALUES ('Admin')
 INSERT INTO Ranks(rankName)
