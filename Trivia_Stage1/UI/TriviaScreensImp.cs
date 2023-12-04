@@ -1,18 +1,21 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Trivia_Stage1.Models;
 
 namespace Trivia_Stage1.UI
 {
     public class TriviaScreensImp:ITriviaScreens
     {
-
+        User logged_in = new User();
+        TriviaContext trivia = new TriviaContext();
+        Random rand = new Random();
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
-
 
         //Implememnt interface here
         public bool ShowLogin()
@@ -45,7 +48,7 @@ namespace Trivia_Stage1.UI
                     Console.ResetColor();
                     email = Console.ReadLine();
                 }
-
+                logged_in.Email = email;
                 Console.Write("Please Type your password: ");
                 string password = Console.ReadLine();
                 while (!IsPasswordValid(password))
@@ -55,7 +58,7 @@ namespace Trivia_Stage1.UI
                     Console.ResetColor();   
                     password = Console.ReadLine();
                 }
-
+                logged_in.Pswrd = password;
                 Console.Write("Please Type your Name: ");
                 string name = Console.ReadLine();
                 while (!IsNameValid(name))
@@ -65,16 +68,13 @@ namespace Trivia_Stage1.UI
                     Console.ResetColor();
                     name = Console.ReadLine();
                 }
-
+                logged_in.Username = name;
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine("Connecting to Server...");
                 Console.ResetColor();
-                /* Create instance of Business Logic and call the signup method
-                 * For example:
                 try
                 {
-                    TriviaDBContext db = new TriviaDBContext();
-                    this.currentyPLayer = db.SignUp(email, password, name);
+                    trivia.Users.Add(logged_in);
                 }
                 catch (Exception ex)
                 {
@@ -82,8 +82,6 @@ namespace Trivia_Stage1.UI
                     Console.WriteLine("Failed to signup! Email may already exist in DB!");
                 Console.ResetColor();
                 }
-                
-                */
 
                 //Provide a proper message for example:
                 Console.WriteLine("Press (B)ack to go back or any other key to signup again...");
