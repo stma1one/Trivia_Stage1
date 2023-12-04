@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Channels;
 using System.Threading.Tasks;
+using Trivia_Stage1.Models;
 
 namespace Trivia_Stage1.UI
 {
     public class TriviaScreensImp:ITriviaScreens
     {
-
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
-
+        TriviaContext triviaContext = new TriviaContext();
+        User user = new User();
 
         //Implememnt interface here
         public bool ShowLogin()
@@ -96,14 +98,49 @@ namespace Trivia_Stage1.UI
 
         public void ShowAddQuestion()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
+           if(user.Points >= 100)
+            {
+                Console.WriteLine("add Question text");
+                Question q = new Question();
+                q.Text = Console.ReadLine();
+
+                q.
+                user.Points = 0;
+            }
         }
 
         public void ShowPendingQuestions()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
+            Console.WriteLine("pending questions");
+            char x;
+            x = '5';
+            
+            foreach (Question q in triviaContext.Questions)
+            {
+                if (q.StatusId == 1)
+                {
+                    Console.WriteLine(q.Text);
+                    Console.WriteLine(q.RightAnswer);
+                    Console.WriteLine(q.WrongAnswer1);
+                    Console.WriteLine(q.WrongAnswer2);
+                    Console.WriteLine(q.WrongAnswer3);
+                    Console.WriteLine("Press 1 to aprove ,Press 2 to reject, Press 3 to skip");
+
+                    while (x == '5')
+                    {
+                        x = Console.ReadKey().KeyChar;
+                        if (x == 1)
+                            q.StatusId = 2;
+                        if (x == 2) q.StatusId = 3;
+                        if (x == 3)
+                            q.StatusId = 1;
+                        else x = '5';
+
+                    }
+
+
+                }
+            }
         }
         public void ShowGame()
         {
