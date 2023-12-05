@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Trivia_Stage1.Models;
 
@@ -11,21 +12,53 @@ namespace Trivia_Stage1.UI
 {
     public class TriviaScreensImp:ITriviaScreens
     {
-        User CurrentUser = new User();
-        TriviaContext Trivia = new TriviaContext();
-        Random rand = new Random();
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
-
-        //Implememnt interface here
+        //Place here any state you would like to keep during the app life time
+        //For example, player login details...
+        TriviaContext context = new TriviaContext();
+        User LoggedUser;
         public bool ShowLogin()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
-            return true;
+            bool loggedIn = false;
+            while (!loggedIn)
+            {
+                if (LoggedUser != null)//Logs out if a user is currently logged in
+                {
+                    LoggedUser = null; ;
+                }
+                Console.Write("Enter Email: ");
+                string email = Console.ReadLine();
+                LoggedUser = context.GetUserByEmail(email);
+                Console.Write("Enter Password: ");
+                string password = Console.ReadLine();
+                if (LoggedUser != null && password == LoggedUser.Pswrd)
+                {
+                        loggedIn = true;
+                }
+                else
+                {
+                    ClearScreenAndSetTitle("Login");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Email or Password is incorrect");
+                    Console.ResetColor();
+                }
+            }
+            return loggedIn;
         }
         public bool ShowSignUp()
         {
+            //Logout user if anyone is logged in!
+            //A reference to the logged in user should be stored as a member variable
+            //in this class! Example:
+            //this.currentyPLayer == null
+
+            //Loop through inputs until a user/player is created or 
+            //user choose to go back to menu
+            if (LoggedUser != null)//Logs out if a user is currently logged in
+            {
+                LoggedUser = null;
+            }
             char c = ' ';
             while (c != 'B' && c != 'b')
             {
@@ -35,7 +68,7 @@ namespace Trivia_Stage1.UI
                 Console.Write("Please Type your email: ");
                 string email = Console.ReadLine();
                 bool emailValid = IsEmailValid(email);
-                bool emailExists = Trivia.DoesUserExist(email);
+                bool emailExists = context.DoesUserExist(email);
                 while (!(emailValid && emailExists))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -43,7 +76,7 @@ namespace Trivia_Stage1.UI
                     else Console.Write("Email already exists! ");
                     Console.Write("Please try again: ");
                 }
-                CurrentUser.Email = email;
+                LoggedUser.Email = email;
                 Console.Write("Please Type your password: ");
                 string password = Console.ReadLine();
                 while (!IsPasswordValid(password))
@@ -53,7 +86,7 @@ namespace Trivia_Stage1.UI
                     Console.ResetColor();   
                     password = Console.ReadLine();
                 }
-                CurrentUser.Pswrd = password;
+                LoggedUser.Pswrd = password;
                 Console.Write("Please Type your Name: ");
                 string name = Console.ReadLine();
                 while (!IsNameValid(name))
@@ -63,17 +96,17 @@ namespace Trivia_Stage1.UI
                     Console.ResetColor();
                     name = Console.ReadLine();
                 }
-                CurrentUser.Username = name;
-                CurrentUser.Points = 0;
-                CurrentUser.Questionsadded = 0;
-                CurrentUser.Rankid = 3;
+                LoggedUser.Username = name;
+                LoggedUser.Points = 0;
+                LoggedUser.Questionsadded = 0;
+                LoggedUser.Rankid = 3;
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine("Connecting to Server...");
                 Console.ResetColor();
                 try
                 {
-                    Trivia.Users.Add(CurrentUser);
-                    Trivia.SaveChanges();
+                    context.Users.Add(LoggedUser);
+                    context.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -97,8 +130,36 @@ namespace Trivia_Stage1.UI
 
         public void ShowPendingQuestions()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
+            Console.WriteLine("pending questions");
+            char x;
+            x = '5';
+            
+            foreach (Question q in context.Questions)
+            {
+                if (q.StatusId == 1)
+                {
+                    Console.WriteLine(q.Text);
+                    Console.WriteLine(q.RightAnswer);
+                    Console.WriteLine(q.WrongAnswer1);
+                    Console.WriteLine(q.WrongAnswer2);
+                    Console.WriteLine(q.WrongAnswer3);
+                    Console.WriteLine("Press 1 to aprove ,Press 2 to reject, Press 3 to skip");
+
+                    while (x == '5')
+                    {
+                        x = Console.ReadKey().KeyChar;
+                        if (x == 1)
+                            q.StatusId = 2;
+                        if (x == 2) q.StatusId = 3;
+                        if (x == 3)
+                            q.StatusId = 1;
+                        else x = '5';
+
+                    }
+
+
+                }
+            }
         }
         public void ShowGame()
         {
