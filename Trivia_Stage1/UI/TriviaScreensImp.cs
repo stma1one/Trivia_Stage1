@@ -126,8 +126,62 @@ namespace Trivia_Stage1.UI
 
         public void ShowAddQuestion()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
+            if (LoggedUser.)
+            {
+                Console.WriteLine("if you wants to return at any point type -1");
+
+                Console.WriteLine("add Question text");
+                Question q = new Question();
+                Subject subject = new Subject();
+                Console.WriteLine("choose a subject 1-sports,2-Politics,3-history,4-sience,5-ramon,");
+                int y = 0;
+                while (y == 0)
+                {
+                    try
+                    {
+                        y = int.Parse(Console.ReadLine());
+                    }
+                    catch { y = 0; Console.WriteLine("you wrote something incorect"); }
+                    if (y == 1)
+                        subject.SubjectName = "sports";
+                    if (y == 2)
+                        subject.SubjectName = "Politics";
+                    if (y == 3)
+                        subject.SubjectName = "history";
+                    if (y == 4)
+                        subject.SubjectName = "sience";
+                    if (y == 5)
+                        subject.SubjectName = "ramon";
+                    if (y == -1)
+                        return;
+                    else y = 0;
+                }
+                string x;
+                q.Text = Console.ReadLine();
+                Console.WriteLine("add rightanswer");
+                x = Console.ReadLine();
+                if (x == "-1") return;
+                q.RightAnswer = x;
+                Console.WriteLine("add wrong answer one:");
+                x = Console.ReadLine();
+                if (x == "-1") return;
+                q.WrongAnswer1 = x;
+                Console.WriteLine("add wrong answer two:");
+                x = Console.ReadLine();
+                if (x == "-1") return;
+                q.WrongAnswer2 = x;
+                Console.WriteLine("add wrong answer three:");
+                x = Console.ReadLine();
+                if (x == "-1") return;
+                q.WrongAnswer3 = x;
+                q.StatusId = 1;
+                q.UserId = LoggedUser.Id;
+                context.Questions.Add(q);
+
+                context.SaveChanges();
+                LoggedUser.Points = 0;
+                LoggedUser.Questionsadded++;
+            }
         }
 
         public void ShowPendingQuestions()
