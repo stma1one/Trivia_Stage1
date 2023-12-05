@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Transactions;
+using Trivia_Stage1.Models;
 
 namespace Trivia_Stage1.UI
 {
     public class TriviaScreensImp:ITriviaScreens
     {
-
+        TriviaContext context = new TriviaContext();
+        Random rand = new Random();
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
 
@@ -107,8 +110,66 @@ namespace Trivia_Stage1.UI
         }
         public void ShowGame()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
+            List<int> = new List<int>();
+            Question question = context.GetRandomQuestion();
+            Console.WriteLine(question.Text);
+            string[] answers = new string[4];
+            answers[0] = question.RightAnswer;
+            answers[1] = question.WrongAnswer1;
+            answers[2] = question.WrongAnswer2;
+            answers[3] = question.WrongAnswer3;
+            int[] answerNum = new int[4];
+            answerNum[0] = rand.Next(0, 4);
+            answerNum[1] = rand.Next(0, 4);
+            for (int i = 0; i < 4; i++)
+            {
+                if (answerNum[1] == answerNum[0])
+                {
+                    if (answerNum[1] == 0) answerNum[1] = 4;
+                    else answerNum[1]--;
+                }
+            }
+            answerNum[2] = rand.Next(0, 4);
+            for (int i = 0; i < 4; i++)
+            {
+                if (answerNum[2] == answerNum[0] || answerNum[2] == answerNum[1])
+                {
+                    if (answerNum[2] == 0) answerNum[2] = 4;
+                    else answerNum[2]--;
+                }
+            }
+            answerNum[3] = rand.Next(0, 4);
+            for (int i = 0; i < 4; i++)
+            {
+                if (answerNum[3] == answerNum[0] || answerNum[3] == answerNum[1] || answerNum[3] == answerNum[2])
+                {
+                    if (answerNum[3] == 0) answerNum[3] = 4;
+                    else answerNum[3]--;
+                }
+            }
+            Console.WriteLine("answer 1 - "+answers[answerNum[0]]);
+            Console.WriteLine("answer 2 - " + answers[answerNum[1]]);
+            Console.WriteLine("answer 3 - " + answers[answerNum[2]]);
+            Console.WriteLine("answer 4 - " + answers[answerNum[3]]);
+            Console.WriteLine("Enter the number of the correct answer");
+
+            int answer=-1;
+            while (answer < 0 || answer > 4)
+            {
+                Console.WriteLine("Enter integer between 1 - 4");
+                while (!int.TryParse(Console.ReadLine(), out answer))
+                    Console.WriteLine("Enter integer between 1 - 4");
+            }
+
+            if (answerNum[answer] == 0)
+            {
+                Console.WriteLine("Correct! Well done");
+            }
+            else
+            {
+                Console.WriteLine("Wrong. Maybe next time");
+            }
+
         }
         public void ShowProfile()
         {

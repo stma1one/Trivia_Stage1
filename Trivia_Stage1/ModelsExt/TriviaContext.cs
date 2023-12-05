@@ -23,5 +23,11 @@ namespace Trivia_Stage1.Models
                 return null;
             }
         }
+        public Question GetRandomQuestion(List<int> list)
+        {
+            Random rand = new Random();
+            int q = rand.Next(0, this.Questions.Count());
+            return this.Questions.Where(x => x.Id == q).First();
+        }
     }
 }
