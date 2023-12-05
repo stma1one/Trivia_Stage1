@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,15 +14,37 @@ namespace Trivia_Stage1.UI
     {
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
-        TriviaContext triviaContext = new TriviaContext();
-        User user = new User();
-
-        //Implememnt interface here
+        //Place here any state you would like to keep during the app life time
+        //For example, player login details...
+        TriviaContext context = new TriviaContext();
+        User LoggedUser;
         public bool ShowLogin()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
-            return true;
+            bool loggedIn = false;
+            while (!loggedIn)
+            {
+                if (LoggedUser != null)//Logs out if a user is currently logged in
+                {
+                    LoggedUser = null; ;
+                }
+                Console.Write("Enter Email: ");
+                string email = Console.ReadLine();
+                LoggedUser = context.GetUserByEmail(email);
+                Console.Write("Enter Password: ");
+                string password = Console.ReadLine();
+                if (LoggedUser != null && password == LoggedUser.Pswrd)
+                {
+                        loggedIn = true;
+                }
+                else
+                {
+                    ClearScreenAndSetTitle("Login");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Email or Password is incorrect");
+                    Console.ResetColor();
+                }
+            }
+            return loggedIn;
         }
         public bool ShowSignUp()
         {
@@ -32,32 +55,40 @@ namespace Trivia_Stage1.UI
 
             //Loop through inputs until a user/player is created or 
             //user choose to go back to menu
+            if (LoggedUser != null)//Logs out if a user is currently logged in
+            {
+                LoggedUser = null;
+            }
             char c = ' ';
-            while (c != 'B' && c != 'b' /*&& this.currentyPLayer == null*/)
+            while (c != 'B' && c != 'b')
             {
                 //Clear screen
                 ClearScreenAndSetTitle("Signup");
 
                 Console.Write("Please Type your email: ");
                 string email = Console.ReadLine();
-                while (!IsEmailValid(email))
+                bool emailValid = IsEmailValid(email);
+                bool emailExists = context.DoesUserExist(email);
+                while (!emailValid || !emailExists)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("Bad Email Format! Please try again:");
+                    if (!emailValid) Console.Write("Bad Email Format! ");
+                    else Console.Write("Email already exists! ");
+                    Console.Write("Please try again: ");
                     Console.ResetColor();
                     email = Console.ReadLine();
                 }
-
+                LoggedUser.Email = email;
                 Console.Write("Please Type your password: ");
                 string password = Console.ReadLine();
                 while (!IsPasswordValid(password))
                 {
-                    Console.ForegroundColor= ConsoleColor.Red;  
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("password must be at least 8 characters! Please try again: ");
-                    Console.ResetColor();   
+                    Console.ResetColor();
                     password = Console.ReadLine();
                 }
-
+                LoggedUser.Pswrd = password;
                 Console.Write("Please Type your Name: ");
                 string name = Console.ReadLine();
                 while (!IsNameValid(name))
@@ -67,27 +98,24 @@ namespace Trivia_Stage1.UI
                     Console.ResetColor();
                     name = Console.ReadLine();
                 }
-
+                LoggedUser.Username = name;
+                LoggedUser.Points = 0;
+                LoggedUser.Questionsadded = 0;
+                LoggedUser.Rankid = 3;
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine("Connecting to Server...");
                 Console.ResetColor();
-                /* Create instance of Business Logic and call the signup method
-                 * For example:
                 try
                 {
-                    TriviaDBContext db = new TriviaDBContext();
-                    this.currentyPLayer = db.SignUp(email, password, name);
+                    context.Users.Add(LoggedUser);
+                    context.SaveChanges();
                 }
                 catch (Exception ex)
                 {
-                Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Failed to signup! Email may already exist in DB!");
-                Console.ResetColor();
+                    Console.ResetColor();
                 }
-                
-                */
-
-                //Provide a proper message for example:
                 Console.WriteLine("Press (B)ack to go back or any other key to signup again...");
                 //Get another input from user
                 c = Console.ReadKey(true).KeyChar;
@@ -98,15 +126,8 @@ namespace Trivia_Stage1.UI
 
         public void ShowAddQuestion()
         {
-           if(user.Points >= 100)
-            {
-                Console.WriteLine("add Question text");
-                Question q = new Question();
-                q.Text = Console.ReadLine();
-
-                q.
-                user.Points = 0;
-            }
+            Console.WriteLine("Not implemented yet! Press any key to continue...");
+            Console.ReadKey(true);
         }
 
         public void ShowPendingQuestions()
@@ -115,7 +136,7 @@ namespace Trivia_Stage1.UI
             char x;
             x = '5';
             
-            foreach (Question q in triviaContext.Questions)
+            foreach (Question q in context.Questions)
             {
                 if (q.StatusId == 1)
                 {
