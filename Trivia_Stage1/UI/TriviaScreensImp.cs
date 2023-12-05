@@ -11,8 +11,8 @@ namespace Trivia_Stage1.UI
 {
     public class TriviaScreensImp:ITriviaScreens
     {
-        User logged_in = new User();
-        TriviaContext trivia = new TriviaContext();
+        User CurrentUser = new User();
+        TriviaContext Trivia = new TriviaContext();
         Random rand = new Random();
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
@@ -26,29 +26,24 @@ namespace Trivia_Stage1.UI
         }
         public bool ShowSignUp()
         {
-            //Logout user if anyone is logged in!
-            //A reference to the logged in user should be stored as a member variable
-            //in this class! Example:
-            //this.currentyPLayer == null
-
-            //Loop through inputs until a user/player is created or 
-            //user choose to go back to menu
             char c = ' ';
-            while (c != 'B' && c != 'b' /*&& this.currentyPLayer == null*/)
+            while (c != 'B' && c != 'b')
             {
                 //Clear screen
                 ClearScreenAndSetTitle("Signup");
 
                 Console.Write("Please Type your email: ");
                 string email = Console.ReadLine();
-                while (!IsEmailValid(email))
+                bool emailValid = IsEmailValid(email);
+                bool emailExists = Trivia.DoesUserExist(email);
+                while (!(emailValid && emailExists))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("Bad Email Format! Please try again:");
-                    Console.ResetColor();
-                    email = Console.ReadLine();
+                    if (!emailValid) Console.Write("Bad Email Format! ");
+                    else Console.Write("Email already exists! ");
+                    Console.Write("Please try again: ");
                 }
-                logged_in.Email = email;
+                CurrentUser.Email = email;
                 Console.Write("Please Type your password: ");
                 string password = Console.ReadLine();
                 while (!IsPasswordValid(password))
@@ -58,7 +53,7 @@ namespace Trivia_Stage1.UI
                     Console.ResetColor();   
                     password = Console.ReadLine();
                 }
-                logged_in.Pswrd = password;
+                CurrentUser.Pswrd = password;
                 Console.Write("Please Type your Name: ");
                 string name = Console.ReadLine();
                 while (!IsNameValid(name))
@@ -68,13 +63,17 @@ namespace Trivia_Stage1.UI
                     Console.ResetColor();
                     name = Console.ReadLine();
                 }
-                logged_in.Username = name;
+                CurrentUser.Username = name;
+                CurrentUser.Points = 0;
+                CurrentUser.Questionsadded = 0;
+                CurrentUser.Rankid = 3;
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine("Connecting to Server...");
                 Console.ResetColor();
                 try
                 {
-                    trivia.Users.Add(logged_in);
+                    Trivia.Users.Add(CurrentUser);
+                    Trivia.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -82,8 +81,6 @@ namespace Trivia_Stage1.UI
                     Console.WriteLine("Failed to signup! Email may already exist in DB!");
                 Console.ResetColor();
                 }
-
-                //Provide a proper message for example:
                 Console.WriteLine("Press (B)ack to go back or any other key to signup again...");
                 //Get another input from user
                 c = Console.ReadKey(true).KeyChar;
