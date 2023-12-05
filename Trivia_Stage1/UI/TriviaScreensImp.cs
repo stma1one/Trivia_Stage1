@@ -123,15 +123,8 @@ namespace Trivia_Stage1.UI
 
         public void ShowAddQuestion()
         {
-           if(user.Points >= 100)
-            {
-                Console.WriteLine("add Question text");
-                Question q = new Question();
-                q.Text = Console.ReadLine();
-
-                q.
-                user.Points = 0;
-            }
+            Console.WriteLine("Not implemented yet! Press any key to continue...");
+            Console.ReadKey(true);
         }
 
         public void ShowPendingQuestions()
@@ -140,7 +133,7 @@ namespace Trivia_Stage1.UI
             char x;
             x = '5';
             
-            foreach (Question q in triviaContext.Questions)
+            foreach (Question q in context.Questions)
             {
                 if (q.StatusId == 1)
                 {
