@@ -18,29 +18,21 @@ namespace Trivia_Stage1.UI
         //Implememnt interface here
         public bool ShowLogin()
         {
-            if (LoggedUser != null)//Logs out if a user is currently logged in
-            {
-                LoggedUser = null;
-            }
             bool loggedIn = false;
             while (!loggedIn)
             {
-                if (LoggedUser != null)
+                if (LoggedUser != null)//Logs out if a user is currently logged in
                 {
-                    Console.WriteLine(LoggedUser.Id);
+                    LoggedUser = null; ;
                 }
-                Console.WriteLine("Enter email:");
+                Console.Write("Enter Email: ");
                 string email = Console.ReadLine();
                 LoggedUser = context.GetUserByEmail(email);
-                Console.WriteLine("Enter password:");
+                Console.Write("Enter Password: ");
                 string password = Console.ReadLine();
-                if (LoggedUser != null)
+                if (LoggedUser != null && password == LoggedUser.Pswrd)
                 {
-                    if (password == LoggedUser.Pswrd)
-                    {
                         loggedIn = true;
-                        Console.WriteLine("Log in successfull");
-                    }
                 }
                 else
                 {
