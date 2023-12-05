@@ -69,21 +69,23 @@ namespace Trivia_Stage1.UI
                 string email = Console.ReadLine();
                 bool emailValid = IsEmailValid(email);
                 bool emailExists = context.DoesUserExist(email);
-                while (!(emailValid && emailExists))
+                while (!emailValid || !emailExists)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     if (!emailValid) Console.Write("Bad Email Format! ");
                     else Console.Write("Email already exists! ");
                     Console.Write("Please try again: ");
+                    Console.ResetColor();
+                    email = Console.ReadLine();
                 }
                 LoggedUser.Email = email;
                 Console.Write("Please Type your password: ");
                 string password = Console.ReadLine();
                 while (!IsPasswordValid(password))
                 {
-                    Console.ForegroundColor= ConsoleColor.Red;  
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("password must be at least 8 characters! Please try again: ");
-                    Console.ResetColor();   
+                    Console.ResetColor();
                     password = Console.ReadLine();
                 }
                 LoggedUser.Pswrd = password;
@@ -110,9 +112,9 @@ namespace Trivia_Stage1.UI
                 }
                 catch (Exception ex)
                 {
-                Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Failed to signup! Email may already exist in DB!");
-                Console.ResetColor();
+                    Console.ResetColor();
                 }
                 Console.WriteLine("Press (B)ack to go back or any other key to signup again...");
                 //Get another input from user
