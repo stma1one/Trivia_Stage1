@@ -55,7 +55,7 @@ namespace Trivia_Stage1.UI
 
             //Loop through inputs until a user/player is created or 
             //user choose to go back to menu
-            if (LoggedUser != null) //Logs out if a user is currently logged in
+            if (LoggedUser != null)//Logs out if a user is currently logged in
             {
                 LoggedUser = null;
             }
@@ -116,8 +116,6 @@ namespace Trivia_Stage1.UI
                     Console.WriteLine("Failed to signup! Email may already exist in DB!");
                     Console.ResetColor();
                 }
-
-                //Provide a proper message for example:
                 Console.WriteLine("Press (B)ack to go back or any other key to signup again...");
                 //Get another input from user
                 c = Console.ReadKey(true).KeyChar;
