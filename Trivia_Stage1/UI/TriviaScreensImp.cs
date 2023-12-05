@@ -130,35 +130,53 @@ namespace Trivia_Stage1.UI
 
         public void ShowPendingQuestions()
         {
-            Console.WriteLine("pending questions");
-            char x;
-            x = '5';
-            
-            foreach (Question q in context.Questions)
+            if (LoggedUser.Rankid == 1 || LoggedUser.Rankid == 2)
             {
-                if (q.StatusId == 1)
+                ClearScreenAndSetTitle("Pending Questions");
+                char x = '5';
+                foreach (Question q in context.Questions)
                 {
-                    Console.WriteLine(q.Text);
-                    Console.WriteLine(q.RightAnswer);
-                    Console.WriteLine(q.WrongAnswer1);
-                    Console.WriteLine(q.WrongAnswer2);
-                    Console.WriteLine(q.WrongAnswer3);
-                    Console.WriteLine("Press 1 to aprove ,Press 2 to reject, Press 3 to skip");
-
-                    while (x == '5')
+                    if (q.StatusId == 2)
                     {
-                        x = Console.ReadKey().KeyChar;
-                        if (x == 1)
-                            q.StatusId = 2;
-                        if (x == 2) q.StatusId = 3;
-                        if (x == 3)
-                            q.StatusId = 1;
-                        else x = '5';
+                        Console.WriteLine($"Question: {q.Text}");
+                        Console.WriteLine($"Correct Answer: {q.RightAnswer}");
+                        Console.WriteLine($"Wrong Answer #1: {q.WrongAnswer1}");
+                        Console.WriteLine($"Wrong Answer #2: {q.WrongAnswer2}");
+                        Console.WriteLine($"Wrong Answer #3: {q.WrongAnswer3}");
+                        Console.WriteLine("Press 1 to aprove ,Press 2 to reject, Press 3 to skip, Press 4 to exit");
+
+                        while (x == '5')
+                        {
+                            x = Console.ReadKey().KeyChar;
+                            if (x == '1')
+                                q.StatusId = 1;
+                            else if (x == '2')
+                                q.StatusId = 3;
+                            else if (x == '3')
+                                q.StatusId = 2;
+                            else if (x == '4')
+                            {
+                                context.SaveChanges();
+                                return;
+                            }
+                            else x = '5';
+
+                        }
+
 
                     }
-
-
                 }
+                context.SaveChanges();
+            }
+            else
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"{"You do not have premission to show this page",65}");
+                Console.WriteLine();
+                Console.ResetColor();
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
             }
         }
         public void ShowGame()
