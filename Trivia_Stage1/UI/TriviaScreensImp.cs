@@ -11,8 +11,8 @@ namespace Trivia_Stage1.UI
 {
     public class TriviaScreensImp:ITriviaScreens
     {
-        User logged_in = new User();
-        TriviaContext trivia = new TriviaContext();
+        User CurrentUser = new User();
+        TriviaContext Trivia = new TriviaContext();
         Random rand = new Random();
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
@@ -41,14 +41,16 @@ namespace Trivia_Stage1.UI
 
                 Console.Write("Please Type your email: ");
                 string email = Console.ReadLine();
-                while (!IsEmailValid(email))
+                bool emailValid = IsEmailValid(email);
+                bool emailExists = Trivia.DoesUserExist(email);
+                while (!IsEmailValid(email)&&!Trivia.DoesUserExist(email))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("Bad Email Format! Please try again:");
+                    Console.Write("Bad Email Format! Please try again: ");
                     Console.ResetColor();
                     email = Console.ReadLine();
                 }
-                logged_in.Email = email;
+                CurrentUser.Email = email;
                 Console.Write("Please Type your password: ");
                 string password = Console.ReadLine();
                 while (!IsPasswordValid(password))
@@ -58,7 +60,7 @@ namespace Trivia_Stage1.UI
                     Console.ResetColor();   
                     password = Console.ReadLine();
                 }
-                logged_in.Pswrd = password;
+                CurrentUser.Pswrd = password;
                 Console.Write("Please Type your Name: ");
                 string name = Console.ReadLine();
                 while (!IsNameValid(name))
@@ -68,13 +70,17 @@ namespace Trivia_Stage1.UI
                     Console.ResetColor();
                     name = Console.ReadLine();
                 }
-                logged_in.Username = name;
+                CurrentUser.Username = name;
+                CurrentUser.Points = 0;
+                CurrentUser.Questionsadded = 0;
+                CurrentUser.Rankid = 3;
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine("Connecting to Server...");
                 Console.ResetColor();
                 try
                 {
-                    trivia.Users.Add(logged_in);
+                    Trivia.Users.Add(CurrentUser);
+                    Trivia.SaveChanges();
                 }
                 catch (Exception ex)
                 {
