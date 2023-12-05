@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Trivia_Stage1.Models;
 
 namespace Trivia_Stage1.UI
 {
@@ -12,14 +13,36 @@ namespace Trivia_Stage1.UI
 
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
-
-
+        private TriviaContext context = new TriviaContext();
+        public User LoggedUser { get; private set; }
         //Implememnt interface here
         public bool ShowLogin()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
-            return true;
+            bool loggedIn = false;
+            while (!loggedIn)
+            {
+                if (LoggedUser != null)//Logs out if a user is currently logged in
+                {
+                    LoggedUser = null; ;
+                }
+                Console.Write("Enter Email: ");
+                string email = Console.ReadLine();
+                LoggedUser = context.GetUserByEmail(email);
+                Console.Write("Enter Password: ");
+                string password = Console.ReadLine();
+                if (LoggedUser != null && password == LoggedUser.Pswrd)
+                {
+                        loggedIn = true;
+                }
+                else
+                {
+                    ClearScreenAndSetTitle("Login");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Email or Password is incorrect");
+                    Console.ResetColor();
+                }
+            }
+            return loggedIn;
         }
         public bool ShowSignUp()
         {
@@ -30,6 +53,10 @@ namespace Trivia_Stage1.UI
 
             //Loop through inputs until a user/player is created or 
             //user choose to go back to menu
+            if (LoggedUser != null)//Logs out if a user is currently logged in
+            {
+                LoggedUser = null;
+            }
             char c = ' ';
             while (c != 'B' && c != 'b' /*&& this.currentyPLayer == null*/)
             {
