@@ -11,7 +11,7 @@ namespace Trivia_Stage1.UI
 {
     public class TriviaScreensImp:ITriviaScreens
     {
-
+        private TriviaDbContext context = new TriviaDbContext();
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
 
@@ -73,21 +73,21 @@ namespace Trivia_Stage1.UI
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine("Connecting to Server...");
                 Console.ResetColor();
-                /* Create instance of Business Logic and call the signup method
-                 * For example:
-                try
-                {
-                    TriviaDBContext db = new TriviaDBContext();
-                    this.currentyPLayer = db.SignUp(email, password, name);
-                }
-                catch (Exception ex)
-                {
-                Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Failed to signup! Email may already exist in DB!");
-                Console.ResetColor();
-                }
-                
-                */
+                //Create instance of Business Logic and call the signup method
+                // *For example:
+                //try
+                //{
+                //    TriviaDBContext db = new TriviaDBContext();
+                //    this.currentyPLayer = db.SignUp(email, password, name);
+                //}
+                //catch (Exception ex)
+                //{
+                //    Console.ForegroundColor = ConsoleColor.Red;
+                //    Console.WriteLine("Failed to signup! Email may already exist in DB!");
+                //    Console.ResetColor();
+                //}
+
+
 
                 //Provide a proper message for example:
                 Console.WriteLine("Press (B)ack to go back or any other key to signup again...");
@@ -100,14 +100,65 @@ namespace Trivia_Stage1.UI
         //איתמר
         public void ShowAddQuestion()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
+
+            Console.WriteLine("Question");
+            foreach(Player p in context.Players)
+            {
+
+                if (p.Points >= 100)
+                {
+                    Console.WriteLine("Horray you reached 100 points now you can add a question");
+                    Console.WriteLine("Write the subject");
+                    string subject=Console.ReadLine();
+                    Console.WriteLine("Write the question");
+                    string question=Console.ReadLine();
+                    Console.WriteLine("Write the correct answer");
+                    string correctanswer=Console.ReadLine();
+                    Console.WriteLine("Write the first wrong answer");
+                    string WrongAnswer1 = Console.ReadLine();
+                    Console.WriteLine("write the second wrong answer");
+                    string WrongAnswer2 = Console.ReadLine();
+                    Console.WriteLine("write the third wrong answer");
+                    string WrongAnswer3 = Console.ReadLine();
+
+
+                }
+                else { Console.WriteLine("if you want to add questions,you need to get more points!"); }
+            }
         }
 
-        public void ShowPendingQuestions()
+        public void ShowPendingQuestions()//Ben
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
+            // Shows a PendingQuestion
+            Console.WriteLine("Pending question");
+            char c;
+            c = '5';
+            foreach (Question q in context.Questions)
+            {
+                if (q.StatusId == 1)
+                {
+                    Console.WriteLine(q.RightA);
+                    Console.WriteLine(q.WrongA1);
+                    Console.WriteLine(q.WrongA2);
+                    Console.WriteLine(q.WrongA3);
+                    Console.WriteLine("Press 1 to approve ,Press 2 to reject, Press 2 to reject, Press 3 to skip");
+
+                    while (c == '5')
+                    {
+                        c = Console.ReadKey().KeyChar;
+                        if (c == 1)
+                        {
+                            q.StatusId = 2;
+                        }
+                        if (c == 2)
+                        {
+                            q.StatusId = 3;
+                        }
+                        else
+                            c = '5';
+                    }
+                }
+            }
         }
         //איתמר
         public void ShowGame()
