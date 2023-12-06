@@ -10,7 +10,14 @@ namespace Trivia_Stage1.Models
     {
         public bool DoesUserExist(string email)
         {
-            return this.Users.Where(user => user.Email == email).Any();
+            try
+            {
+                return this.Users.Where(user => user.Email == email).Any();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Couldn't connect to server");
+            }
         }
         public User GetUserByEmail(string email)
         {
@@ -20,7 +27,7 @@ namespace Trivia_Stage1.Models
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Couldn't connect to server");
             }
         }
     }

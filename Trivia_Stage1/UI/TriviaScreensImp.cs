@@ -18,33 +18,79 @@ namespace Trivia_Stage1.UI
         //For example, player login details...
         TriviaContext context = new TriviaContext();
         User LoggedUser;
+        Dictionary<string, string> ranks = new Dictionary<string, string>(){
+            { "1", "Admin" },
+            { "2", "Master" },
+            { "3", "Rookie" }
+        };
+        public string CheckUsernameValidity()
+        {
+            string username = Console.ReadLine();
+            while (!IsNameValid(username))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("Username must be at least 2 characters! Please try again: ");
+                Console.ResetColor();
+                username = Console.ReadLine();
+            }
+            return username;
+        }
+        public string CheckPasswordValidity()
+        {
+            string password = Console.ReadLine();
+            while (!IsPasswordValid(password))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("Password must be at least 8 characters! Please try again: ");
+                Console.ResetColor();
+                password = Console.ReadLine();
+            }
+            return password;
+        }
+        public string CheckEmailValidity()
+        {
+            string email = Console.ReadLine();
+            bool emailValid = IsEmailValid(email);
+            while (!(emailValid && !context.DoesUserExist(email)))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                if (!emailValid) Console.Write("Bad Email Format! ");
+                else Console.Write("Email already exists! ");
+                Console.Write("Please try again: ");
+                Console.ResetColor();
+                email = Console.ReadLine();
+                emailValid = IsEmailValid(email);
+            }
+            return email;
+        }
         public bool ShowLogin()
         {
-            bool loggedIn = false;
-            while (!loggedIn)
+            LoggedUser = null;
+            while (LoggedUser == null)
             {
-                if (LoggedUser != null)//Logs out if a user is currently logged in
-                {
-                    LoggedUser = null; ;
-                }
+                User testedUser = null;
                 Console.Write("Enter Email: ");
                 string email = Console.ReadLine();
-                LoggedUser = context.GetUserByEmail(email);
                 Console.Write("Enter Password: ");
                 string password = Console.ReadLine();
-                if (LoggedUser != null && password == LoggedUser.Pswrd)
+                if (context.DoesUserExist(email))
+                    testedUser = context.GetUserByEmail(email);
+                if (testedUser != null && password == testedUser.Pswrd)
                 {
-                        loggedIn = true;
+                    LoggedUser = testedUser;
                 }
                 else
                 {
                     ClearScreenAndSetTitle("Login");
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Email or Password is incorrect");
+                    Console.Write("Email or Password is incorrect. Wanna try again? (Y/n) ");
+                    char command = Console.ReadKey().KeyChar;
+                    if (command.ToString().ToUpper() == "N") return false;
                     Console.ResetColor();
+                    Console.Clear();
                 }
             }
-            return loggedIn;
+            return true;
         }
         public bool ShowSignUp()
         {
@@ -55,10 +101,7 @@ namespace Trivia_Stage1.UI
 
             //Loop through inputs until a user/player is created or 
             //user choose to go back to menu
-            if (LoggedUser != null)//Logs out if a user is currently logged in
-            {
-                LoggedUser = null;
-            }
+            LoggedUser = new User();
             char c = ' ';
             while (c != 'B' && c != 'b')
             {
@@ -66,39 +109,14 @@ namespace Trivia_Stage1.UI
                 ClearScreenAndSetTitle("Signup");
 
                 Console.Write("Please Type your email: ");
-                string email = Console.ReadLine();
-                bool emailValid = IsEmailValid(email);
-                bool emailExists = context.DoesUserExist(email);
-                while (!emailValid || !emailExists)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    if (!emailValid) Console.Write("Bad Email Format! ");
-                    else Console.Write("Email already exists! ");
-                    Console.Write("Please try again: ");
-                    Console.ResetColor();
-                    email = Console.ReadLine();
-                }
+                string email = CheckEmailValidity();
                 LoggedUser.Email = email;
                 Console.Write("Please Type your password: ");
-                string password = Console.ReadLine();
-                while (!IsPasswordValid(password))
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("password must be at least 8 characters! Please try again: ");
-                    Console.ResetColor();
-                    password = Console.ReadLine();
-                }
+                string password = CheckPasswordValidity();
                 LoggedUser.Pswrd = password;
-                Console.Write("Please Type your Name: ");
-                string name = Console.ReadLine();
-                while (!IsNameValid(name))
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("name must be at least 2 characters! Please try again: ");
-                    Console.ResetColor();
-                    name = Console.ReadLine();
-                }
-                LoggedUser.Username = name;
+                Console.Write("Please Type your username: ");
+                string username = CheckUsernameValidity();
+                LoggedUser.Username = username;
                 LoggedUser.Points = 0;
                 LoggedUser.Questionsadded = 0;
                 LoggedUser.Rankid = 3;
@@ -193,8 +211,36 @@ namespace Trivia_Stage1.UI
         }
         public void ShowProfile()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
+            ClearScreenAndSetTitle("Your profile:");
+            Console.WriteLine("Current Email Address: "+LoggedUser.Email);
+            Console.WriteLine("Current Password: "+LoggedUser.Pswrd);
+            Console.WriteLine("Current Points: " + LoggedUser.Points);
+            Console.WriteLine("Current Rank: " + ranks[LoggedUser.Rankid.ToString()]);
+            Console.Write("Change (E)mail Address/(U)sername/(P)assword (anything else to go back) ");
+            char command = Console.ReadKey().KeyChar;
+            Console.Clear();
+            Console.Write("Insert new ");
+            switch (command.ToString().ToUpper())
+            {
+                case "E":
+                    Console.Write("email: ");
+                    string email = CheckEmailValidity();
+                    LoggedUser.Email = email;
+                    break;
+                case "U":
+                    Console.Write("username: ");
+                    string username = CheckUsernameValidity();
+                    LoggedUser.Username = username;
+                    break;
+                case "P":
+                    Console.Write("password: ");
+                    string password = CheckPasswordValidity();
+                    LoggedUser.Pswrd = password;
+                    break;
+                default:
+                    return;
+            }
+            context.SaveChanges();
         }
 
 
@@ -226,9 +272,9 @@ namespace Trivia_Stage1.UI
             return !string.IsNullOrEmpty(password) && password.Length >= 8;
         }
 
-        private bool IsNameValid(string name)
+        private bool IsNameValid(string username)
         {
-            return !string.IsNullOrEmpty(name) && name.Length >= 2;
+            return !string.IsNullOrEmpty(username) && username.Length >= 2;
         }
     }
 }
