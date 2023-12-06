@@ -29,7 +29,7 @@ namespace Trivia_Stage1.UI
             while (!IsNameValid(username))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("Username must be at least 2 characters! Please try again: ");
+                Console.Write("Username Must Be At Least 2 Characters! Please Try Again: ");
                 Console.ResetColor();
                 username = Console.ReadLine();
             }
@@ -41,7 +41,7 @@ namespace Trivia_Stage1.UI
             while (!IsPasswordValid(password))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("Password must be at least 8 characters! Please try again: ");
+                Console.Write("Password Must Be At Least 8 Characters! Please Try Again: ");
                 Console.ResetColor();
                 password = Console.ReadLine();
             }
@@ -55,8 +55,8 @@ namespace Trivia_Stage1.UI
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 if (!emailValid) Console.Write("Bad Email Format! ");
-                else Console.Write("Email already exists! ");
-                Console.Write("Please try again: ");
+                else Console.Write("Email Already Exists! ");
+                Console.Write("Please Try Again: ");
                 Console.ResetColor();
                 email = Console.ReadLine();
                 emailValid = IsEmailValid(email);
@@ -83,10 +83,10 @@ namespace Trivia_Stage1.UI
                 {
                     ClearScreenAndSetTitle("Login");
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("Email or Password is incorrect. Wanna try again? (Y/n) ");
+                    Console.Write("Email or Password is Incorrect. Wanna Try Again? (Y/n) ");
+                    Console.ResetColor();
                     char command = Console.ReadKey().KeyChar;
                     if (command.ToString().ToUpper() == "N") return false;
-                    Console.ResetColor();
                     ClearScreenAndSetTitle("Login");
                 }
             }
@@ -108,13 +108,13 @@ namespace Trivia_Stage1.UI
                 //Clear screen
                 ClearScreenAndSetTitle("Signup");
 
-                Console.Write("Please Type your email: ");
+                Console.Write("Please Type Your Email: ");
                 string email = CheckEmailValidity();
                 LoggedUser.Email = email;
-                Console.Write("Please Type your password: ");
+                Console.Write("Please Type Your Password: ");
                 string password = CheckPasswordValidity();
                 LoggedUser.Pswrd = password;
-                Console.Write("Please Type your username: ");
+                Console.Write("Please Type Your Username: ");
                 string username = CheckUsernameValidity();
                 LoggedUser.Username = username;
                 LoggedUser.Points = 0;
@@ -131,10 +131,10 @@ namespace Trivia_Stage1.UI
                 catch (Exception ex)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Failed to signup! Email may already exist in DB!");
+                    Console.WriteLine("Failed to Signup! Email May Already Exist in DB!");
                     Console.ResetColor();
                 }
-                Console.WriteLine("Press (B)ack to go back or any other key to signup again...");
+                Console.WriteLine("Press (B)ack to Go Back or Any Other Key to Signup Again...");
                 //Get another input from user
                 c = Console.ReadKey(true).KeyChar;
             }
@@ -146,43 +146,53 @@ namespace Trivia_Stage1.UI
         {
             if (LoggedUser.Rankid == 1 || LoggedUser.Rankid == 2)
             {
+                Console.ForegroundColor= ConsoleColor.DarkBlue;
                 Console.Write("Add the Question's Text (B to go back): ");
+                Console.ResetColor();
                 string qText = Console.ReadLine();
                 Question q = new Question();
                 if (qText.ToUpper() == "B")
                     return;
                 q.Text = qText;
-                Console.WriteLine("Choose a Subject 1 - Sports, 2 - Politics, 3 - History, 4 - Sience, 5 - Ramon");
-                int y = 0;
-                while (y == 0)
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Choose a Subject 1 - Sports, 2 - Politics, 3 - History, 4 - Sience, 5 - Ramon: ");
+                Console.ResetColor();
+                char y = '0';
+                while (y == '0')
                 {
-                    while (!(int.TryParse(Console.ReadLine(), out y)))
-                    {
-                        Console.WriteLine("You Need to Type a Number");
-                    }
-                    if (y == 1)
+                    y = Console.ReadKey().KeyChar;
+                    if (y == '1')
                         q.SubjectId = 1;
-                    else if (y == 2)
+                    else if (y == '2')
                         q.SubjectId = 2;
-                    else if (y == 3)
+                    else if (y == '3')
                         q.SubjectId = 3;
-                    else if (y == 4)
+                    else if (y == '4')
                         q.SubjectId = 4;
-                    else if (y == 5)
+                    else if (y == '5')
                         q.SubjectId = 5;
-                    else y = 0;
+                    else y = '0';
                 }
+                Console.WriteLine();
                 string x;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Add the Correct Answer: ");
+                Console.ResetColor();
                 x = Console.ReadLine();
                 q.RightAnswer = x;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("Add Wrong Answer #1: ");
+                Console.ResetColor();
                 x = Console.ReadLine();
                 q.WrongAnswer1 = x;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("Add Wrong Answer #2: ");
+                Console.ResetColor();
                 x = Console.ReadLine();
                 q.WrongAnswer2 = x;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("Add Wrong Answer #3: ");
+                Console.ResetColor();
                 x = Console.ReadLine();
                 q.WrongAnswer3 = x;
                 q.StatusId = 2;
@@ -225,7 +235,7 @@ namespace Trivia_Stage1.UI
                         Console.WriteLine($"Wrong Answer #2: {q.WrongAnswer2}");
                         Console.WriteLine($"Wrong Answer #3: {q.WrongAnswer3}");
                         Console.ResetColor();
-                        Console.WriteLine("Press 1 to aprove ,Press 2 to reject, Press 3 to skip, Press 4 to exit");
+                        Console.WriteLine("Press 1 to Aprove ,Press 2 to Reject, Press 3 to Skip, Press 4 to Exit");
 
                         while (x == '5')
                         {
@@ -270,31 +280,31 @@ namespace Trivia_Stage1.UI
         {
             string currEmail = LoggedUser.Email;
             ClearScreenAndSetTitle("Your profile:");
-            Console.WriteLine("Current Email Address: "+LoggedUser.Email);
-            Console.WriteLine("Current Password: "+LoggedUser.Pswrd);
-            Console.WriteLine("Current Username: " + LoggedUser.Username);
+            Console.WriteLine("Email Address: "+LoggedUser.Email);
+            Console.WriteLine("Password: "+LoggedUser.Pswrd);
+            Console.WriteLine("Username: " + LoggedUser.Username);
             Console.WriteLine("Current Points: " + LoggedUser.Points);
-            Console.WriteLine("Current Rank: " + ranks[LoggedUser.Rankid.ToString()]);
-            Console.Write("Change (E)mail Address/(U)sername/(P)assword (anything else to go back) ");
+            Console.WriteLine("Rank: " + ranks[LoggedUser.Rankid.ToString()]);
+            Console.Write("Change (E)mail Address/(U)sername/(P)assword (Anything Else to Go Back) ");
             char command = Console.ReadKey().KeyChar;
             Console.Clear();
-            Console.Write("Insert new ");
+            Console.Write("Insert New ");
             switch (command.ToString().ToUpper())
             {
                 case "E":
-                    Console.Write("email: ");
+                    Console.Write("Email: ");
                     string email = CheckEmailValidity();
                     context.GetUserByEmail(currEmail).Email = email;
                     LoggedUser.Email = email;
                     break;
                 case "U":
-                    Console.Write("username: ");
+                    Console.Write("Username: ");
                     string username = CheckUsernameValidity();
                     context.GetUserByEmail(currEmail).Username = username;
                     LoggedUser.Username = username;
                     break;
                 case "P":
-                    Console.Write("password: ");
+                    Console.Write("Password: ");
                     string password = CheckPasswordValidity();
                     context.GetUserByEmail(currEmail).Pswrd = password;
                     LoggedUser.Pswrd = password;
