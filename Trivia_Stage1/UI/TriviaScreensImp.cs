@@ -36,6 +36,8 @@ namespace Trivia_Stage1.UI
         public string CheckUsernameValidity()
         {
             string username = Console.ReadLine();
+            if (username.ToUpper() == "B")
+                return username;
             while (!IsNameValid(username))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -48,6 +50,8 @@ namespace Trivia_Stage1.UI
         public string CheckPasswordValidity()
         {
             string password = Console.ReadLine();
+            if (password.ToUpper() == "B")
+                return password;
             while (!IsPasswordValid(password))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -60,6 +64,8 @@ namespace Trivia_Stage1.UI
         public string CheckEmailValidity()
         {
             string email = Console.ReadLine();
+            if (email.ToUpper() == "B")
+                return email;
             bool emailValid = IsEmailValid(email);
             while (!(emailValid && !context.DoesUserExist(email)))
             {
@@ -91,7 +97,7 @@ namespace Trivia_Stage1.UI
                 }
                 else
                 {
-                    ClearScreenAndSetTitle("Login");
+                    ClearScreenAndSetTitle("Login               ");
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("Email or Password is Incorrect. Wanna Try Again? (Y/n) ");
                     Console.ResetColor();
@@ -115,17 +121,24 @@ namespace Trivia_Stage1.UI
             char c = ' ';
             while (c != 'B' && c != 'b')
             {
-                //Clear screen
-                ClearScreenAndSetTitle("Signup");
-
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Press \"b\" at Any Point to Go Back to the Main Menu");
+                Console.ResetColor();
+                Console.WriteLine();
                 Console.Write("Please Type Your Email: ");
                 string email = CheckEmailValidity();
+                if (email.ToUpper() == "B")
+                    return false;
                 LoggedUser.Email = email;
                 Console.Write("Please Type Your Password: ");
                 string password = CheckPasswordValidity();
+                if (password.ToUpper() == "B")
+                    return false;
                 LoggedUser.Pswrd = password;
                 Console.Write("Please Type Your Username: ");
                 string username = CheckUsernameValidity();
+                if (username.ToUpper() == "B")
+                    return false;
                 LoggedUser.Username = username;
                 LoggedUser.Points = 0;
                 LoggedUser.Questionsadded = 0;
@@ -285,11 +298,14 @@ namespace Trivia_Stage1.UI
         {
             while (true)
             {
+                ClearScreenAndSetTitle("Game On           ");
                 Question question = context.GetRandomQuestion();
                 List<string> answerList = new List<string>()
                 {question.RightAnswer, question.WrongAnswer1, question.WrongAnswer2, question.WrongAnswer3};
                 answerList = answerList.OrderBy(x => Random.Shared.Next()).ToList();
-                ClearScreenAndSetTitle(question.Text);
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine($"{question.Text, 80}");
+                Console.ResetColor();
                 Console.WriteLine("A. " + answerList[0]);
                 Console.WriteLine("B. " + answerList[1]);
                 Console.WriteLine("C. " + answerList[2]);
@@ -305,17 +321,17 @@ namespace Trivia_Stage1.UI
                 }
                 if (answerList[answersDict[answer]-1] == question.RightAnswer)
                 {
-                    ClearScreenAndSetTitle("You are correct! The answer is indeed " + question.RightAnswer);
+                    ClearScreenAndSetTitle("You Are Correct! The Answer is Indeed " + question.RightAnswer);
                     LoggedUser.Points += 10;
                 }
                 else
                 {
-                    ClearScreenAndSetTitle("You are wrong! The answer is " + question.RightAnswer);
+                    ClearScreenAndSetTitle("You Are Wrong! The Answer is " + question.RightAnswer);
                     LoggedUser.Points -= 5;
                 }
                 if (LoggedUser.Points > 100) LoggedUser.Points = 100;
                 if (LoggedUser.Points < 0) LoggedUser.Points = 0;
-                Console.Write("Wanna play again? (y/N) ");
+                Console.Write("Wanna Play Again? (y/N) ");
                 char command = Console.ReadKey().KeyChar;
                 if (command.ToString().ToUpper() != "Y")
                 {
@@ -369,7 +385,7 @@ namespace Trivia_Stage1.UI
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"{title,65}");
+            Console.WriteLine($"{title,75}");
             Console.WriteLine();
             Console.ResetColor();   
         }
