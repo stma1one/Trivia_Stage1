@@ -87,7 +87,7 @@ namespace Trivia_Stage1.UI
                     char command = Console.ReadKey().KeyChar;
                     if (command.ToString().ToUpper() == "N") return false;
                     Console.ResetColor();
-                    Console.Clear();
+                    ClearScreenAndSetTitle("Login");
                 }
             }
             return true;
@@ -197,7 +197,7 @@ namespace Trivia_Stage1.UI
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"{"You Do Not Have Permission to View This Page",65}");
+                Console.WriteLine($"{"You Do Not Have Permission to View This Page",80}");
                 Console.WriteLine();
                 Console.ResetColor();
                 Console.WriteLine("Press Any Key to Continue");
@@ -254,7 +254,7 @@ namespace Trivia_Stage1.UI
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"{"You Do Not Have Permission to View This Page",65}");
+                Console.WriteLine($"{"You Do Not Have Permission to View This Page",80}");
                 Console.WriteLine();
                 Console.ResetColor();
                 Console.WriteLine("Press Any Key to Continue");
