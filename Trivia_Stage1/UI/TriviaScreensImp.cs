@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Trivia_Stage1.Models;
 
 namespace Trivia_Stage1.UI
 {
@@ -12,17 +15,40 @@ namespace Trivia_Stage1.UI
 
         //Place here any state you would like to keep during the app life time
         //For example, player login details...
-
-
+         private TriviaContext Db = new TriviaContext();
+        Player p;
         //Implememnt interface here
         public bool ShowLogin()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
-            return true;
+            bool ok = false; 
+            while (!ok)
+            {
+                Console.WriteLine("Please enter your name");
+                string UserName = Console.ReadLine();
+                Console.WriteLine("Please enter your email");
+                string email = Console.ReadLine();
+                Console.WriteLine("Please enter a password");
+                string password = Console.ReadLine();
+
+                try
+                {
+                    this.p = Db.Login(UserName, password, email);
+                    if (p != null)
+                    {
+                        return true;
+                       
+                    }
+                    else { Console.WriteLine("enter again");
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine("there is a problem..."); }
+              
+            }
+            return ok;
         }
         public bool ShowSignUp()
         {
+
             //Logout user if anyone is logged in!
             //A reference to the logged in user should be stored as a member variable
             //in this class! Example:
