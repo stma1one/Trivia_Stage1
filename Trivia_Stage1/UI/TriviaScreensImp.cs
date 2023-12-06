@@ -268,9 +268,11 @@ namespace Trivia_Stage1.UI
         }
         public void ShowProfile()
         {
+            string currEmail = LoggedUser.Email;
             ClearScreenAndSetTitle("Your profile:");
             Console.WriteLine("Current Email Address: "+LoggedUser.Email);
             Console.WriteLine("Current Password: "+LoggedUser.Pswrd);
+            Console.WriteLine("Current Username: " + LoggedUser.Username);
             Console.WriteLine("Current Points: " + LoggedUser.Points);
             Console.WriteLine("Current Rank: " + ranks[LoggedUser.Rankid.ToString()]);
             Console.Write("Change (E)mail Address/(U)sername/(P)assword (anything else to go back) ");
@@ -282,16 +284,19 @@ namespace Trivia_Stage1.UI
                 case "E":
                     Console.Write("email: ");
                     string email = CheckEmailValidity();
+                    context.GetUserByEmail(currEmail).Email = email;
                     LoggedUser.Email = email;
                     break;
                 case "U":
                     Console.Write("username: ");
                     string username = CheckUsernameValidity();
+                    context.GetUserByEmail(currEmail).Username = username;
                     LoggedUser.Username = username;
                     break;
                 case "P":
                     Console.Write("password: ");
                     string password = CheckPasswordValidity();
+                    context.GetUserByEmail(currEmail).Pswrd = password;
                     LoggedUser.Pswrd = password;
                     break;
                 default:
