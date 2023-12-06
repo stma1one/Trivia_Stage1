@@ -133,16 +133,21 @@ namespace Trivia_Stage1.UI
             if (LoggedUser.Rankid == 1 || LoggedUser.Rankid == 2)
             {
                 ClearScreenAndSetTitle("Pending Questions");
-                char x = '5';
+                
                 foreach (Question q in context.Questions)
                 {
+                    char x = '5';
                     if (q.StatusId == 2)
                     {
+                        ClearScreenAndSetTitle("Pending Questions");
                         Console.WriteLine($"Question: {q.Text}");
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine($"Correct Answer: {q.RightAnswer}");
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"Wrong Answer #1: {q.WrongAnswer1}");
                         Console.WriteLine($"Wrong Answer #2: {q.WrongAnswer2}");
                         Console.WriteLine($"Wrong Answer #3: {q.WrongAnswer3}");
+                        Console.ResetColor();
                         Console.WriteLine("Press 1 to aprove ,Press 2 to reject, Press 3 to skip, Press 4 to exit");
 
                         while (x == '5')
