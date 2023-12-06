@@ -10,7 +10,7 @@ RankId int Identity(1,1) not null PRIMARY KEY,
 RankName nvarchar(150) not null
 );
 
-delete [Players];
+
 
 CREATE TABLE [Players]
 ( 

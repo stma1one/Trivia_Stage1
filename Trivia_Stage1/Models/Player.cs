@@ -17,12 +17,12 @@ public partial class Player
     [StringLength(20)]
     public string Name { get; set; } = null!;
 
-    //[StringLength(20)]
-    //public string Password { get; set; } = null!;
-
     public int RankId { get; set; }
 
     public int Points { get; set; }
+
+    [StringLength(20)]
+    public string Password { get; set; } = null!;
 
     [InverseProperty("Player")]
     public virtual ICollection<Question> Questions { get; } = new List<Question>();
