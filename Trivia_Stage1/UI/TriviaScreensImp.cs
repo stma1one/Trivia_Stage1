@@ -23,6 +23,16 @@ namespace Trivia_Stage1.UI
             { "2", "Master" },
             { "3", "Rookie" }
         };
+        Dictionary<string, int> answersDict = new Dictionary<string, int>(){
+            { "A", 1 },
+            { "B", 2 },
+            { "C", 3 },
+            { "D", 4 }
+        };
+        public void AddProgressToDB()
+        {
+
+        }
         public string CheckUsernameValidity()
         {
             string username = Console.ReadLine();
@@ -273,8 +283,46 @@ namespace Trivia_Stage1.UI
         }
         public void ShowGame()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
+            while (true)
+            {
+                Question question = context.GetRandomQuestion();
+                List<string> answerList = new List<string>()
+                {question.RightAnswer, question.WrongAnswer1, question.WrongAnswer2, question.WrongAnswer3};
+                answerList = answerList.OrderBy(x => Random.Shared.Next()).ToList();
+                ClearScreenAndSetTitle(question.Text);
+                Console.WriteLine("A. " + answerList[0]);
+                Console.WriteLine("B. " + answerList[1]);
+                Console.WriteLine("C. " + answerList[2]);
+                Console.WriteLine("D. " + answerList[3]);
+                Console.Write("Write the letter of the correct answer (or B to go back): ");
+                string answer = Console.ReadKey().KeyChar.ToString().ToUpper();
+                while (!answersDict.ContainsKey(answer))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nThis letter isn't a command. Please try again: ");
+                    Console.ForegroundColor= ConsoleColor.White;
+                    answer = Console.ReadKey().KeyChar.ToString().ToUpper();
+                }
+                if (answerList[answersDict[answer]-1] == question.RightAnswer)
+                {
+                    ClearScreenAndSetTitle("You are correct! The answer is indeed " + question.RightAnswer);
+                    LoggedUser.Points += 10;
+                }
+                else
+                {
+                    ClearScreenAndSetTitle("You are wrong! The answer is " + question.RightAnswer);
+                    LoggedUser.Points -= 5;
+                }
+                if (LoggedUser.Points > 100) LoggedUser.Points = 100;
+                if (LoggedUser.Points < 0) LoggedUser.Points = 0;
+                Console.Write("Wanna play again? (y/N) ");
+                char command = Console.ReadKey().KeyChar;
+                if (command.ToString().ToUpper() != "Y")
+                {
+                    context.GetUserByEmail(LoggedUser.Email).Points = LoggedUser.Points;
+                    return;
+                }
+            }
         }
         public void ShowProfile()
         {
