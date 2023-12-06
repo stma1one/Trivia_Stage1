@@ -33,7 +33,7 @@ public partial class TriviaDbContext : DbContext
     {
         modelBuilder.Entity<Player>(entity =>
         {
-            entity.HasKey(e => e.PlayerId).HasName("PK__Players__4A4E74C8AB2BFF0F");
+            entity.HasKey(e => e.PlayerId).HasName("PK__Players__4A4E74C86CEC8D12");
 
             entity.HasOne(d => d.Rank).WithMany(p => p.Players)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -42,7 +42,7 @@ public partial class TriviaDbContext : DbContext
 
         modelBuilder.Entity<Question>(entity =>
         {
-            entity.HasKey(e => e.QuestionId).HasName("PK__Question__0DC06FACCFC7143F");
+            entity.HasKey(e => e.QuestionId).HasName("PK__Question__0DC06FAC40DBAAE5");
 
             entity.HasOne(d => d.Player).WithMany(p => p.Questions)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -59,17 +59,17 @@ public partial class TriviaDbContext : DbContext
 
         modelBuilder.Entity<Rank>(entity =>
         {
-            entity.HasKey(e => e.RankId).HasName("PK__Ranks__B37AF876513DDC08");
+            entity.HasKey(e => e.RankId).HasName("PK__Ranks__B37AF876F4AAA06B");
         });
 
         modelBuilder.Entity<Status>(entity =>
         {
-            entity.HasKey(e => e.StatusId).HasName("PK__Status__C8EE206316860C1C");
+            entity.HasKey(e => e.StatusId).HasName("PK__Status__C8EE2063B56943D2");
         });
 
         modelBuilder.Entity<Subject>(entity =>
         {
-            entity.HasKey(e => e.SubjectId).HasName("PK__Subject__AC1BA3A8354CEAB1");
+            entity.HasKey(e => e.SubjectId).HasName("PK__Subject__AC1BA3A8509E7C22");
         });
 
         OnModelCreatingPartial(modelBuilder);

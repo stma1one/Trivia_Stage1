@@ -97,9 +97,9 @@ namespace Trivia_Stage1.UI
             //return true if signup suceeded!
             return (false);
         }
-        //איתמר
+        //Ben
         public void ShowAddQuestion()
-        {
+        {//פעולה הבודקת האם יש למשתמש מספיק נקודות כדי להוסיף שאלה ומבקשת ממנו להוסיף שאלה
 
             Console.WriteLine("Question");
             foreach(Player p in context.Players)
@@ -141,7 +141,7 @@ namespace Trivia_Stage1.UI
                     Console.WriteLine(q.WrongA1);
                     Console.WriteLine(q.WrongA2);
                     Console.WriteLine(q.WrongA3);
-                    Console.WriteLine("Press 1 to approve ,Press 2 to reject, Press 2 to reject, Press 3 to skip");
+                    Console.WriteLine("Press 1 to approve ,Press 2 to reject, Press 3 to skip");
 
                     while (c == '5')
                     {

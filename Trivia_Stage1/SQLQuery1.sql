@@ -10,15 +10,19 @@ RankId int Identity(1,1) not null PRIMARY KEY,
 RankName nvarchar(150) not null
 );
 
+delete [Players];
+
 CREATE TABLE [Players]
 ( 
 PlayerId int Identity(1,1) not null PRIMARY KEY,
 Mail nvarchar(30) not null,
-Name nvarchar(20) not null,
+[Name] nvarchar(20) not null,
+[Password] nvarchar(20) not null,
 RankId int not null,
 CONSTRAINT FK_RankId FOREIGN KEY (RankId) REFERENCES [Ranks](RankId),
 Points int not null
 );
+
 
 
 
@@ -52,4 +56,5 @@ WrongA1 nvarchar(300) not null,
 WrongA2 nvarchar(300) not null,
 WrongA3 nvarchar(300) not null
 );
+
 
