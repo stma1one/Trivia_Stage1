@@ -126,8 +126,65 @@ namespace Trivia_Stage1.UI
 
         public void ShowAddQuestion()
         {
-            Console.WriteLine("Not implemented yet! Press any key to continue...");
-            Console.ReadKey(true);
+            if (LoggedUser.Rankid == 1 || LoggedUser.Rankid == 2)
+            {
+                Console.Write("Add the Question's Text (B to go back): ");
+                string qText = Console.ReadLine();
+                Question q = new Question();
+                if (qText.ToUpper() == "B")
+                    return;
+                q.Text = qText;
+                Console.WriteLine("Choose a Subject 1 - Sports, 2 - Politics, 3 - History, 4 - Sience, 5 - Ramon");
+                int y = 0;
+                while (y == 0)
+                {
+                    while (!(int.TryParse(Console.ReadLine(), out y)))
+                    {
+                        Console.WriteLine("You Need to Type a Number");
+                    }
+                    if (y == 1)
+                        q.SubjectId = 1;
+                    else if (y == 2)
+                        q.SubjectId = 2;
+                    else if (y == 3)
+                        q.SubjectId = 3;
+                    else if (y == 4)
+                        q.SubjectId = 4;
+                    else if (y == 5)
+                        q.SubjectId = 5;
+                    else y = 0;
+                }
+                string x;
+                Console.Write("Add the Correct Answer: ");
+                x = Console.ReadLine();
+                q.RightAnswer = x;
+                Console.Write("Add Wrong Answer #1: ");
+                x = Console.ReadLine();
+                q.WrongAnswer1 = x;
+                Console.Write("Add Wrong Answer #2: ");
+                x = Console.ReadLine();
+                q.WrongAnswer2 = x;
+                Console.Write("Add Wrong Answer #3: ");
+                x = Console.ReadLine();
+                q.WrongAnswer3 = x;
+                q.StatusId = 2;
+                q.UserId = LoggedUser.Id;
+                context.Questions.Add(q);
+
+                context.SaveChanges();
+                LoggedUser.Points = 0;
+                LoggedUser.Questionsadded++;
+            }
+            else
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"{"You Do Not Have Permission to View This Page",65}");
+                Console.WriteLine();
+                Console.ResetColor();
+                Console.WriteLine("Press Any Key to Continue");
+                Console.ReadKey();
+            }
         }
 
         public void ShowPendingQuestions()
@@ -179,10 +236,10 @@ namespace Trivia_Stage1.UI
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"{"You do not have premission to show this page",65}");
+                Console.WriteLine($"{"You Do Not Have Permission to View This Page",65}");
                 Console.WriteLine();
                 Console.ResetColor();
-                Console.WriteLine("Press any key to continue");
+                Console.WriteLine("Press Any Key to Continue");
                 Console.ReadKey();
             }
         }
