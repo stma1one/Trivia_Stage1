@@ -324,7 +324,11 @@ namespace Trivia_Stage1.UI
                 }
                 else
                 {
-                    ClearScreenAndSetTitle("You are wrong! the answer is " + question.RightAnswer);
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{("You are wrong! The answer is " + question.RightAnswer),65}");
+                    Console.WriteLine();
+                    Console.ResetColor();
                     LoggedUser.Points -= 5;
                 }
                 if (LoggedUser.Points > 100) LoggedUser.Points = 100;
