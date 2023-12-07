@@ -178,7 +178,7 @@ namespace Trivia_Stage1.UI
                     return;
                 q.Text = qText;
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("Choose a subject 1 - Sports, 2 - Politics, 3 - History, 4 - Sience, 5 - Ramon: ");
+                Console.Write("Choose a subject 1 - Sports, 2 - Politics, 3 - History, 4 - Science, 5 - Ramon: ");
                 Console.ResetColor();
                 char y = '0';
                 while (y == '0')
