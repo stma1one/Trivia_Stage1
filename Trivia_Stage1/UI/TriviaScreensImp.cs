@@ -167,7 +167,7 @@ namespace Trivia_Stage1.UI
 
         public void ShowAddQuestion()
         {
-            if (LoggedUser.Rankid == 1 || LoggedUser.Rankid == 2)
+            if (LoggedUser.Points == 100)
             {
                 Console.ForegroundColor= ConsoleColor.DarkBlue;
                 Console.Write("Add the question's text (B to go back): ");
