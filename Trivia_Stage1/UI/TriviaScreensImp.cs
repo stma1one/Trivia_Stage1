@@ -36,10 +36,12 @@ namespace Trivia_Stage1.UI
         public string CheckUsernameValidity()
         {
             string username = Console.ReadLine();
+            if (username.ToUpper() == "B")
+                return username;
             while (!IsNameValid(username))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("Username must be at least 2 characters! Please try again: ");
+                Console.Write("Username must be at least 2 characters! please try again: ");
                 Console.ResetColor();
                 username = Console.ReadLine();
             }
@@ -48,10 +50,12 @@ namespace Trivia_Stage1.UI
         public string CheckPasswordValidity()
         {
             string password = Console.ReadLine();
+            if (password.ToUpper() == "B")
+                return password;
             while (!IsPasswordValid(password))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("Password must be at least 8 characters! Please try again: ");
+                Console.Write("Password must be at least 8 characters! please try again: ");
                 Console.ResetColor();
                 password = Console.ReadLine();
             }
@@ -60,11 +64,13 @@ namespace Trivia_Stage1.UI
         public string CheckEmailValidity()
         {
             string email = Console.ReadLine();
+            if (email.ToUpper() == "B")
+                return email;
             bool emailValid = IsEmailValid(email);
             while (!(emailValid && !context.DoesUserExist(email)))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                if (!emailValid) Console.Write("Bad Email Format! ");
+                if (!emailValid) Console.Write("Bad email format! ");
                 else Console.Write("Email already exists! ");
                 Console.Write("Please try again: ");
                 Console.ResetColor();
@@ -91,13 +97,13 @@ namespace Trivia_Stage1.UI
                 }
                 else
                 {
-                    ClearScreenAndSetTitle("Login");
+                    ClearScreenAndSetTitle("Login               ");
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("Email or Password is incorrect. Wanna try again? (Y/n) ");
+                    Console.Write("Email or password is incorrect. Wanna try again? (Y/n) ");
+                    Console.ResetColor();
                     char command = Console.ReadKey().KeyChar;
                     if (command.ToString().ToUpper() == "N") return false;
-                    Console.ResetColor();
-                    ClearScreenAndSetTitle("Login");
+                    ClearScreenAndSetTitle("Login               ");
                 }
             }
             return true;
@@ -113,19 +119,26 @@ namespace Trivia_Stage1.UI
             //user choose to go back to menu
             LoggedUser = new User();
             char c = ' ';
-            while (c != 'B' && c != 'b')
+            while (c.ToString().ToUpper() != "B")
             {
-                //Clear screen
-                ClearScreenAndSetTitle("Signup");
-
-                Console.Write("Please Type your email: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Press \"B\" at any point to go back to the main menu");
+                Console.ResetColor();
+                Console.WriteLine();
+                Console.Write("Please type your email: ");
                 string email = CheckEmailValidity();
+                if (email.ToUpper() == "B")
+                    return false;
                 LoggedUser.Email = email;
-                Console.Write("Please Type your password: ");
+                Console.Write("Please type your password: ");
                 string password = CheckPasswordValidity();
+                if (password.ToUpper() == "B")
+                    return false;
                 LoggedUser.Pswrd = password;
-                Console.Write("Please Type your username: ");
+                Console.Write("Please type your username: ");
                 string username = CheckUsernameValidity();
+                if (username.ToUpper() == "B")
+                    return false;
                 LoggedUser.Username = username;
                 LoggedUser.Points = 0;
                 LoggedUser.Questionsadded = 0;
@@ -154,45 +167,55 @@ namespace Trivia_Stage1.UI
 
         public void ShowAddQuestion()
         {
-            if (LoggedUser.Rankid == 1 || LoggedUser.Rankid == 2)
+            if (LoggedUser.Points == 100)
             {
-                Console.Write("Add the Question's Text (B to go back): ");
+                Console.ForegroundColor= ConsoleColor.DarkBlue;
+                Console.Write("Add the question's text (B to go back): ");
+                Console.ResetColor();
                 string qText = Console.ReadLine();
                 Question q = new Question();
                 if (qText.ToUpper() == "B")
                     return;
                 q.Text = qText;
-                Console.WriteLine("Choose a Subject 1 - Sports, 2 - Politics, 3 - History, 4 - Sience, 5 - Ramon");
-                int y = 0;
-                while (y == 0)
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Choose a subject 1 - Sports, 2 - Politics, 3 - History, 4 - Science, 5 - Ramon: ");
+                Console.ResetColor();
+                char y = '0';
+                while (y == '0')
                 {
-                    while (!(int.TryParse(Console.ReadLine(), out y)))
-                    {
-                        Console.WriteLine("You Need to Type a Number");
-                    }
-                    if (y == 1)
+                    y = Console.ReadKey().KeyChar;
+                    if (y == '1')
                         q.SubjectId = 1;
-                    else if (y == 2)
+                    else if (y == '2')
                         q.SubjectId = 2;
-                    else if (y == 3)
+                    else if (y == '3')
                         q.SubjectId = 3;
-                    else if (y == 4)
+                    else if (y == '4')
                         q.SubjectId = 4;
-                    else if (y == 5)
+                    else if (y == '5')
                         q.SubjectId = 5;
-                    else y = 0;
+                    else y = '0';
                 }
+                Console.WriteLine();
                 string x;
-                Console.Write("Add the Correct Answer: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("Add the correct answer: ");
+                Console.ResetColor();
                 x = Console.ReadLine();
                 q.RightAnswer = x;
-                Console.Write("Add Wrong Answer #1: ");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("Add wrong answer #1: ");
+                Console.ResetColor();
                 x = Console.ReadLine();
                 q.WrongAnswer1 = x;
-                Console.Write("Add Wrong Answer #2: ");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("Add wrong answer #2: ");
+                Console.ResetColor();
                 x = Console.ReadLine();
                 q.WrongAnswer2 = x;
-                Console.Write("Add Wrong Answer #3: ");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("Add wrong answer #3: ");
+                Console.ResetColor();
                 x = Console.ReadLine();
                 q.WrongAnswer3 = x;
                 q.StatusId = 2;
@@ -207,10 +230,10 @@ namespace Trivia_Stage1.UI
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"{"You Do Not Have Permission to View This Page",80}");
+                Console.WriteLine($"{"You do not have permission to view this page",80}");
                 Console.WriteLine();
                 Console.ResetColor();
-                Console.WriteLine("Press Any Key to Continue");
+                Console.WriteLine("Press any key to continue");
                 Console.ReadKey();
             }
         }
@@ -218,24 +241,22 @@ namespace Trivia_Stage1.UI
         public void ShowPendingQuestions()
         {
             if (LoggedUser.Rankid == 1 || LoggedUser.Rankid == 2)
-            {
-                ClearScreenAndSetTitle("Pending Questions");
-                
+            { 
                 foreach (Question q in context.Questions)
                 {
                     char x = '5';
                     if (q.StatusId == 2)
                     {
-                        ClearScreenAndSetTitle("Pending Questions");
+                        ClearScreenAndSetTitle("Pending Questions         ");
                         Console.WriteLine($"Question: {q.Text}");
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine($"Correct Answer: {q.RightAnswer}");
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Wrong Answer #1: {q.WrongAnswer1}");
-                        Console.WriteLine($"Wrong Answer #2: {q.WrongAnswer2}");
-                        Console.WriteLine($"Wrong Answer #3: {q.WrongAnswer3}");
+                        Console.WriteLine($"Wrong answer #1: {q.WrongAnswer1}");
+                        Console.WriteLine($"Wrong answer #2: {q.WrongAnswer2}");
+                        Console.WriteLine($"Wrong answer #3: {q.WrongAnswer3}");
                         Console.ResetColor();
-                        Console.WriteLine("Press 1 to aprove ,Press 2 to reject, Press 3 to skip, Press 4 to exit");
+                        Console.WriteLine("Press 1 to approve ,Press 2 to reject, Press 3 to skip, Press 4 to exit");
 
                         while (x == '5')
                         {
@@ -264,10 +285,10 @@ namespace Trivia_Stage1.UI
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"{"You Do Not Have Permission to View This Page",80}");
+                Console.WriteLine($"{"You do not have permission to view this page",80}");
                 Console.WriteLine();
                 Console.ResetColor();
-                Console.WriteLine("Press Any Key to Continue");
+                Console.WriteLine("Press any key to continue");
                 Console.ReadKey();
             }
         }
@@ -275,11 +296,14 @@ namespace Trivia_Stage1.UI
         {
             while (true)
             {
+                ClearScreenAndSetTitle("Game On           ");
                 Question question = context.GetRandomQuestion();
                 List<string> answerList = new List<string>()
                 {question.RightAnswer, question.WrongAnswer1, question.WrongAnswer2, question.WrongAnswer3};
                 answerList = answerList.OrderBy(x => Random.Shared.Next()).ToList();
-                ClearScreenAndSetTitle(question.Text);
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine($"{question.Text, 80}");
+                Console.ResetColor();
                 Console.WriteLine("A. " + answerList[0]);
                 Console.WriteLine("B. " + answerList[1]);
                 Console.WriteLine("C. " + answerList[2]);
@@ -295,17 +319,21 @@ namespace Trivia_Stage1.UI
                 }
                 if (answerList[answersDict[answer]-1] == question.RightAnswer)
                 {
-                    ClearScreenAndSetTitle("You are correct! The answer is indeed " + question.RightAnswer);
+                    ClearScreenAndSetTitle("You are correct! the answer is indeed " + question.RightAnswer);
                     LoggedUser.Points += 10;
                 }
                 else
                 {
-                    ClearScreenAndSetTitle("You are wrong! The answer is " + question.RightAnswer);
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{("You are wrong! The answer is " + question.RightAnswer),65}");
+                    Console.WriteLine();
+                    Console.ResetColor();
                     LoggedUser.Points -= 5;
                 }
                 if (LoggedUser.Points > 100) LoggedUser.Points = 100;
                 if (LoggedUser.Points < 0) LoggedUser.Points = 0;
-                Console.Write("Wanna play again? (y/N) ");
+                Console.Write("\t\t\t\t\tWanna play again? (y/N) ");
                 char command = Console.ReadKey().KeyChar;
                 if (command.ToString().ToUpper() != "Y")
                 {
@@ -317,33 +345,48 @@ namespace Trivia_Stage1.UI
         public void ShowProfile()
         {
             string currEmail = LoggedUser.Email;
-            ClearScreenAndSetTitle("Your profile:");
-            Console.WriteLine("Current Email Address: "+LoggedUser.Email);
-            Console.WriteLine("Current Password: "+LoggedUser.Pswrd);
-            Console.WriteLine("Current Username: " + LoggedUser.Username);
+            ClearScreenAndSetTitle("Your profile:             ");
+            Console.WriteLine("Email Address: " + LoggedUser.Email);
+            Console.WriteLine("Password: " + LoggedUser.Pswrd);
+            Console.WriteLine("Username: " + LoggedUser.Username);
             Console.WriteLine("Current Points: " + LoggedUser.Points);
-            Console.WriteLine("Current Rank: " + ranks[LoggedUser.Rankid.ToString()]);
-            Console.Write("Change (E)mail Address/(U)sername/(P)assword (anything else to go back) ");
+            Console.WriteLine("Rank: " + ranks[LoggedUser.Rankid.ToString()]);
+            Console.Write("Change (E)mail address/(U)sername/(P)assword (Anything else to go back) ");
             char command = Console.ReadKey().KeyChar;
-            Console.Clear();
-            Console.Write("Insert new ");
+            ClearScreenAndSetTitle("Update Details           ");
+            Console.Write("\tInsert new ");
             switch (command.ToString().ToUpper())
             {
                 case "E":
-                    Console.Write("email: ");
+                    Console.Write("Email: ");
                     string email = CheckEmailValidity();
+                    if (email.ToUpper() == "B")
+                    {
+                        ShowProfile();
+                        break;
+                    }
                     context.GetUserByEmail(currEmail).Email = email;
                     LoggedUser.Email = email;
                     break;
                 case "U":
-                    Console.Write("username: ");
+                    Console.Write("Username: ");
                     string username = CheckUsernameValidity();
+                    if (username.ToUpper() == "B")
+                    {
+                        ShowProfile();
+                        break;
+                    }
                     context.GetUserByEmail(currEmail).Username = username;
                     LoggedUser.Username = username;
                     break;
                 case "P":
-                    Console.Write("password: ");
+                    Console.Write("Password: ");
                     string password = CheckPasswordValidity();
+                    if (password.ToUpper() == "B")
+                    {
+                        ShowProfile();
+                        break;
+                    }
                     context.GetUserByEmail(currEmail).Pswrd = password;
                     LoggedUser.Pswrd = password;
                     break;
@@ -359,7 +402,7 @@ namespace Trivia_Stage1.UI
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"{title,65}");
+            Console.WriteLine($"{title,75}");
             Console.WriteLine();
             Console.ResetColor();   
         }
