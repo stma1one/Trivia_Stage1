@@ -36,7 +36,7 @@ namespace Trivia_Stage1.UI
         public string CheckUsernameValidity()
         {
             string username = Console.ReadLine();
-            if (username.ToUpper() == "B")
+            if (username.ToUpper() == "B") //if the value that was entered is "B"\"b" the program will go to the previous screen (later when used)
                 return username;
             while (!IsNameValid(username))
             {
@@ -50,7 +50,7 @@ namespace Trivia_Stage1.UI
         public string CheckPasswordValidity()
         {
             string password = Console.ReadLine();
-            if (password.ToUpper() == "B")
+            if (password.ToUpper() == "B") //if the value that was entered is "B"\"b" the program will go to the previous screen (later when used)
                 return password;
             while (!IsPasswordValid(password))
             {
@@ -64,10 +64,10 @@ namespace Trivia_Stage1.UI
         public string CheckEmailValidity()
         {
             string email = Console.ReadLine();
-            if (email.ToUpper() == "B")
+            if (email.ToUpper() == "B") //if the value that was entered is "B"\"b" the program will go to the previous screen (later when used)
                 return email;
             bool emailValid = IsEmailValid(email);
-            while (!(emailValid && !context.DoesUserExist(email)))
+            while (!(emailValid && !context.DoesUserExist(email))) //checks if the email is in the wrong format and exists, if so, requests to enter the email again
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 if (!emailValid) Console.Write("Bad email format! ");
@@ -75,6 +75,8 @@ namespace Trivia_Stage1.UI
                 Console.Write("Please try again: ");
                 Console.ResetColor();
                 email = Console.ReadLine();
+                if (email.ToUpper() == "B")
+                    return email;
                 emailValid = IsEmailValid(email);
             }
             return email;
@@ -127,17 +129,17 @@ namespace Trivia_Stage1.UI
                 Console.WriteLine();
                 Console.Write("Please type your email: ");
                 string email = CheckEmailValidity();
-                if (email.ToUpper() == "B")
+                if (email.ToUpper() == "B") //goes to previous screen if entered value is "B"/"b"
                     return false;
                 LoggedUser.Email = email;
                 Console.Write("Please type your password: ");
                 string password = CheckPasswordValidity();
-                if (password.ToUpper() == "B")
+                if (password.ToUpper() == "B")//goes to previous screen if entered value is "B"/"b"
                     return false;
                 LoggedUser.Pswrd = password;
                 Console.Write("Please type your username: ");
                 string username = CheckUsernameValidity();
-                if (username.ToUpper() == "B")
+                if (username.ToUpper() == "B")//goes to previous screen if entered value is "B"/"b"
                     return false;
                 LoggedUser.Username = username;
                 LoggedUser.Points = 0;
@@ -150,6 +152,7 @@ namespace Trivia_Stage1.UI
                 {
                     context.Users.Add(LoggedUser);
                     context.SaveChanges();
+                    return true;
                 }
                 catch (Exception ex)
                 {
@@ -167,7 +170,7 @@ namespace Trivia_Stage1.UI
 
         public void ShowAddQuestion()
         {
-            if (LoggedUser.Points == 100)
+            if (LoggedUser.Points == 100 || LoggedUser.Rankid == 1)
             {
                 Console.ForegroundColor= ConsoleColor.DarkBlue;
                 Console.Write("Add the question's text (B to go back): ");
@@ -178,9 +181,9 @@ namespace Trivia_Stage1.UI
                     return;
                 q.Text = qText;
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("Choose a subject 1 - Sports, 2 - Politics, 3 - History, 4 - Science, 5 - Ramon: ");
+                Console.Write("Choose a subject: 1 - Sports, 2 - Politics, 3 - History, 4 - Science, 5 - Ramon: ");
                 Console.ResetColor();
-                char y = '0';
+                char y = '0'; //the index of the subject
                 while (y == '0')
                 {
                     y = Console.ReadKey().KeyChar;
@@ -244,7 +247,7 @@ namespace Trivia_Stage1.UI
             { 
                 foreach (Question q in context.Questions)
                 {
-                    char x = '5';
+                    char x = '5'; //an index that will be changed back to '5' if a wrong value is entered
                     if (q.StatusId == 2)
                     {
                         ClearScreenAndSetTitle("Pending Questions         ");
@@ -333,6 +336,7 @@ namespace Trivia_Stage1.UI
                 }
                 if (LoggedUser.Points > 100) LoggedUser.Points = 100;
                 if (LoggedUser.Points < 0) LoggedUser.Points = 0;
+                Console.WriteLine($"\t\t\t\tYour current points: {LoggedUser.Points}");
                 Console.Write("\t\t\t\t\tWanna play again? (y/N) ");
                 char command = Console.ReadKey().KeyChar;
                 if (command.ToString().ToUpper() != "Y")
