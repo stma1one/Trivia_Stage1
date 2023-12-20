@@ -29,10 +29,6 @@ namespace Trivia_Stage1.UI
             { "C", 3 },
             { "D", 4 }
         };
-        public void AddProgressToDB()
-        {
-
-        }
         public string CheckUsernameValidity()
         {
             string username = Console.ReadLine();
@@ -42,7 +38,7 @@ namespace Trivia_Stage1.UI
                 Console.Write("Username must be at least 2 characters! Please try again: ");
                 Console.ResetColor();
                 username = Console.ReadLine();
-            }
+            } // loops when username isn't valid
             return username;
         }
         public string CheckPasswordValidity()
@@ -54,7 +50,7 @@ namespace Trivia_Stage1.UI
                 Console.Write("Password must be at least 8 characters! Please try again: ");
                 Console.ResetColor();
                 password = Console.ReadLine();
-            }
+            } // loops when password ins't valid
             return password;
         }
         public string CheckEmailValidity()
@@ -70,7 +66,7 @@ namespace Trivia_Stage1.UI
                 Console.ResetColor();
                 email = Console.ReadLine();
                 emailValid = IsEmailValid(email);
-            }
+            } // loops when email isn't valid or exists
             return email;
         }
         public bool ShowLogin()
@@ -88,7 +84,7 @@ namespace Trivia_Stage1.UI
                 if (testedUser != null && password == testedUser.Pswrd)
                 {
                     LoggedUser = testedUser;
-                }
+                } // changed current logged user to login details if they are correct
                 else
                 {
                     ClearScreenAndSetTitle("Login");
@@ -98,7 +94,7 @@ namespace Trivia_Stage1.UI
                     if (command.ToString().ToUpper() == "N") return false;
                     Console.ResetColor();
                     ClearScreenAndSetTitle("Login");
-                }
+                } // email/password are invalid
             }
             return true;
         }
@@ -130,6 +126,7 @@ namespace Trivia_Stage1.UI
                 LoggedUser.Points = 0;
                 LoggedUser.Questionsadded = 0;
                 LoggedUser.Rankid = 3;
+                // sets user details
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine("Connecting to Server...");
                 Console.ResetColor();
@@ -181,7 +178,7 @@ namespace Trivia_Stage1.UI
                     else if (y == 5)
                         q.SubjectId = 5;
                     else y = 0;
-                }
+                } // choosing a subject
                 string x;
                 Console.Write("Add the Correct Answer: ");
                 x = Console.ReadLine();
@@ -198,8 +195,8 @@ namespace Trivia_Stage1.UI
                 q.StatusId = 2;
                 q.UserId = LoggedUser.Id;
                 context.Questions.Add(q);
-
                 context.SaveChanges();
+                // adds question to db
                 LoggedUser.Points = 0;
                 LoggedUser.Questionsadded++;
             }
@@ -212,7 +209,7 @@ namespace Trivia_Stage1.UI
                 Console.ResetColor();
                 Console.WriteLine("Press Any Key to Continue");
                 Console.ReadKey();
-            }
+            } // no permissions
         }
 
         public void ShowPendingQuestions()
@@ -236,7 +233,7 @@ namespace Trivia_Stage1.UI
                         Console.WriteLine($"Wrong Answer #3: {q.WrongAnswer3}");
                         Console.ResetColor();
                         Console.WriteLine("Press 1 to aprove ,Press 2 to reject, Press 3 to skip, Press 4 to exit");
-
+                        // printing text
                         while (x == '5')
                         {
                             x = Console.ReadKey().KeyChar;
@@ -253,7 +250,7 @@ namespace Trivia_Stage1.UI
                             }
                             else x = '5';
 
-                        }
+                        } // switch statement for approval options
 
 
                     }
@@ -269,7 +266,7 @@ namespace Trivia_Stage1.UI
                 Console.ResetColor();
                 Console.WriteLine("Press Any Key to Continue");
                 Console.ReadKey();
-            }
+            } // no permission
         }
         public void ShowGame()
         {
@@ -278,31 +275,33 @@ namespace Trivia_Stage1.UI
                 Question question = context.GetRandomQuestion();
                 List<string> answerList = new List<string>()
                 {question.RightAnswer, question.WrongAnswer1, question.WrongAnswer2, question.WrongAnswer3};
-                answerList = answerList.OrderBy(x => Random.Shared.Next()).ToList();
+                answerList = answerList.OrderBy(x => Random.Shared.Next()).ToList(); // randomizing order or answers
                 ClearScreenAndSetTitle(question.Text);
                 Console.WriteLine("A. " + answerList[0]);
                 Console.WriteLine("B. " + answerList[1]);
                 Console.WriteLine("C. " + answerList[2]);
                 Console.WriteLine("D. " + answerList[3]);
                 Console.Write("Write the letter of the correct answer (or B to go back): ");
+                // printing question
                 string answer = Console.ReadKey().KeyChar.ToString().ToUpper();
+                // getting answer
                 while (!answersDict.ContainsKey(answer))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\nThis letter isn't a command. Please try again: ");
                     Console.ForegroundColor= ConsoleColor.White;
                     answer = Console.ReadKey().KeyChar.ToString().ToUpper();
-                }
+                } // wrong letter
                 if (answerList[answersDict[answer]-1] == question.RightAnswer)
                 {
                     ClearScreenAndSetTitle("You are correct! The answer is indeed " + question.RightAnswer);
                     LoggedUser.Points += 10;
-                }
+                } // correct answer
                 else
                 {
                     ClearScreenAndSetTitle("You are wrong! The answer is " + question.RightAnswer);
                     LoggedUser.Points -= 5;
-                }
+                } //wrong answer
                 if (LoggedUser.Points > 100) LoggedUser.Points = 100;
                 if (LoggedUser.Points < 0) LoggedUser.Points = 0;
                 Console.Write("Wanna play again? (y/N) ");
@@ -311,7 +310,7 @@ namespace Trivia_Stage1.UI
                 {
                     context.GetUserByEmail(LoggedUser.Email).Points = LoggedUser.Points;
                     return;
-                }
+                } // adding/removing points from user
             }
         }
         public void ShowProfile()
@@ -324,6 +323,7 @@ namespace Trivia_Stage1.UI
             Console.WriteLine("Current Points: " + LoggedUser.Points);
             Console.WriteLine("Current Rank: " + ranks[LoggedUser.Rankid.ToString()]);
             Console.Write("Change (E)mail Address/(U)sername/(P)assword (anything else to go back) ");
+            // printing details
             char command = Console.ReadKey().KeyChar;
             Console.Clear();
             Console.Write("Insert new ");
@@ -349,7 +349,7 @@ namespace Trivia_Stage1.UI
                     break;
                 default:
                     return;
-            }
+            } // changing email/username/password
             context.SaveChanges();
         }
 
