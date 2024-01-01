@@ -31,28 +31,21 @@ namespace Trivia_Stage1.Models
                 throw new Exception("Couldn't connect to server");
             }
         }
-        public Rank GetUserWithRanks(int id)
+        public Question? GetRandomQuestion()
         {
             try
             {
-                return Users.Include(p => p.Rank).FirstOrDefault(p => p.Id == id).Rank;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Couldn't connect to server");
-            }
-        }
-        public Question GetRandomQuestion()
-        {
-            Random rand = new Random();
-            try
-            {
-                int q = rand.Next(1, this.Questions.Count()+1);
-                return this.Questions.Where(x => x.Id == q).First();
+                return this.Questions.Where(x => x.StatusId == 1).ToList().OrderBy(x => Random.Shared.Next()).FirstOrDefault();
             }
             catch (Exception ex) {
                 throw new Exception("Couldn't connect to server");
             }
+        }
+        public Question GetRandomQuestion(List<int> list)
+        {
+            Random rand = new Random();
+            int q = rand.Next(0, this.Questions.Count());
+            return this.Questions.Where(x => x.Id == q).First();
         }
     }
 }
