@@ -8,22 +8,22 @@ namespace Trivia_Stage1.Models
 {
     public partial class TriviaContext
     {
-        public bool DoesUserExist(string email)
+        public User? GetUserByEmail(string email)
         {
             try
             {
-                return this.Users.Where(user => user.Email == email).Any();
+                return this.Users.Where(user => user.Email == email).First();
             }
             catch (Exception ex)
             {
                 throw new Exception("Couldn't connect to server");
             }
         }
-        public User GetUserByEmail(string email)
+        public User? GetUserByEmailAndPassword(string email, string password)
         {
             try
             {
-                return this.Users.Where(user => user.Email == email).First();
+                return this.Users.Where(user => user.Email == email && user.Pswrd == password).First();
             }
             catch (Exception ex)
             {
