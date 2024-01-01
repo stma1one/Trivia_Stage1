@@ -63,7 +63,7 @@ namespace Trivia_Stage1.UI
             if (email.ToUpper() == "B") //if the value that was entered is "B"\"b" the program will go to the previous screen (later when used)
                 return email;
             bool emailValid = IsEmailValid(email);
-            while (!(emailValid && !context.DoesUserExist(email))) //checks if the email is in the wrong format and exists, if so, requests to enter the email again
+            while (!(emailValid && context.GetUserByEmail(email) != null)) //checks if the email is in the wrong format and exists, if so, requests to enter the email again
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 if (!emailValid) Console.Write("Bad email format! ");
@@ -82,14 +82,12 @@ namespace Trivia_Stage1.UI
             LoggedUser = null;
             while (LoggedUser == null)
             {
-                User testedUser = null;
                 Console.Write("Enter Email: ");
                 string email = Console.ReadLine();
                 Console.Write("Enter Password: ");
                 string password = Console.ReadLine();
-                if (context.DoesUserExist(email))
-                    testedUser = context.GetUserByEmail(email);
-                if (testedUser != null && password == testedUser.Pswrd)
+                User testedUser = context.GetUserByEmailAndPassword(email, password);
+                if (testedUser != null)
                 {
                     LoggedUser = testedUser;
                 } // changed current logged user to login details if they are correct
@@ -343,6 +341,7 @@ namespace Trivia_Stage1.UI
                 if (command.ToString().ToUpper() != "Y")
                 {
                     context.GetUserByEmail(LoggedUser.Email).Points = LoggedUser.Points;
+                    context.SaveChanges();
                     return;
                 } // adding/removing points from user
             }
