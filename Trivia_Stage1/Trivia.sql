@@ -78,4 +78,10 @@ INSERT INTO Statuses (currentStatus)
 VALUES ('Denied')
 UPDATE Questions SET [statusId] = 1
 WHERE userId = 1
+UPDATE Questions SET [statusId] = 2
+WHERE id = 5
+UPDATE Questions SET [statusId] = 2
+WHERE id = 4
+UPDATE Questions SET [statusId] = 2
+WHERE id = 3
 

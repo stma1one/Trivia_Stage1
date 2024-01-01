@@ -8,19 +8,37 @@ namespace Trivia_Stage1.Models
 {
     public partial class TriviaContext
     {
-        public bool DoesUserExist(string email)
-        {
-            return this.Users.Where(user => user.Email == email).Any();
-        }
-        public User GetUserByEmail(string email)
+        public User? GetUserByEmail(string email)
         {
             try
             {
-                return this.Users.Where(user => user.Email == email).First();
+                return this.Users.Where(user => user.Email == email).FirstOrDefault();
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Couldn't connect to server");
+            }
+        }
+        public User? GetUserByEmailAndPassword(string email, string password)
+        {
+            try
+            {
+                return this.Users.Where(user => user.Email == email && user.Pswrd == password).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Couldn't connect to server");
+            }
+        }
+        public Question? GetRandomQuestion()
+        {
+            Random rand = new Random();
+            try
+            {
+                return this.Questions.Where(x => x.StatusId == 1).OrderBy(x => rand.Next()).FirstOrDefault();
+            }
+            catch (Exception ex) {
+                throw new Exception("Couldn't connect to server");
             }
         }
         public Question GetRandomQuestion(List<int> list)
