@@ -32,10 +32,9 @@ namespace Trivia_Stage1.Models
         }
         public Question? GetRandomQuestion()
         {
-            Random rand = new Random();
             try
             {
-                return this.Questions.Where(x => x.StatusId == 1).OrderBy(x => rand.Next()).FirstOrDefault();
+                return this.Questions.Where(x => x.StatusId == 1).ToList().OrderBy(x => Random.Shared.Next()).FirstOrDefault();
             }
             catch (Exception ex) {
                 throw new Exception("Couldn't connect to server");
