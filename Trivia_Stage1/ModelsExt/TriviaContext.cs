@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,17 @@ namespace Trivia_Stage1.Models
             try
             {
                 return this.Users.Where(user => user.Email == email && user.Pswrd == password).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Couldn't connect to server");
+            }
+        }
+        public Rank GetUserWithRanks(int id)
+        {
+            try
+            {
+                return Users.Include(p => p.Rank).FirstOrDefault(p => p.Id == id).Rank;
             }
             catch (Exception ex)
             {
