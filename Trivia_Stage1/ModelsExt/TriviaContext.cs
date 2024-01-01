@@ -12,7 +12,7 @@ namespace Trivia_Stage1.Models
         {
             try
             {
-                return this.Users.Where(user => user.Email == email).First();
+                return this.Users.Where(user => user.Email == email).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -23,7 +23,7 @@ namespace Trivia_Stage1.Models
         {
             try
             {
-                return this.Users.Where(user => user.Email == email && user.Pswrd == password).First();
+                return this.Users.Where(user => user.Email == email && user.Pswrd == password).FirstOrDefault();
             }
             catch (Exception ex)
             {
