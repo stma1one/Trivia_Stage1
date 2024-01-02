@@ -169,7 +169,7 @@ namespace Trivia_Stage1.UI
         {
             if (LoggedUser.Points == 100 || LoggedUser.Rankid == 1)
             {
-                Console.ForegroundColor= ConsoleColor.DarkBlue;
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.Write("Add the question's text (B to go back): ");
                 Console.ResetColor();
                 string qText = Console.ReadLine();
@@ -184,16 +184,8 @@ namespace Trivia_Stage1.UI
                 while (y == '0')
                 {
                     y = Console.ReadKey().KeyChar;
-                    if (y == '1')
-                        q.SubjectId = 1;
-                    else if (y == '2')
-                        q.SubjectId = 2;
-                    else if (y == '3')
-                        q.SubjectId = 3;
-                    else if (y == '4')
-                        q.SubjectId = 4;
-                    else if (y == '5')
-                        q.SubjectId = 5;
+                    if (1 <= y && y <= 5)
+                        q.SubjectId = y;
                     else y = '0';
                 } // choosing a subject
                 Console.WriteLine();
@@ -220,11 +212,13 @@ namespace Trivia_Stage1.UI
                 q.WrongAnswer3 = x;
                 q.StatusId = 2;
                 q.UserId = LoggedUser.Id;
-                context.Questions.Add(q);
-                context.SaveChanges();
+                if (context.AddQ(q))
+                {//adds question to db and retuns true if it worked
+                    context.RemovePoint(LoggedUser, q);//removes  point add 1 to Qcount
+
+                }
                 // adds question to db
-                LoggedUser.Points = 0;
-                LoggedUser.Questionsadded++;
+
             }
             else
             {
@@ -241,44 +235,47 @@ namespace Trivia_Stage1.UI
         public void ShowPendingQuestions()
         {
             if (LoggedUser.Rankid == 1 || LoggedUser.Rankid == 2)
-            { 
-                foreach (Question q in context.Questions)
-                {
-                    char x = '5'; //an index that will be changed back to '5' if a wrong value is entered
-                    if (q.StatusId == 2)
+            {
+                if (context.Questions != null)
+                    foreach (Question q in context.Questions.Where(q => q.StatusId == 2))
                     {
-                        ClearScreenAndSetTitle("Pending Questions         ");
-                        Console.WriteLine($"Question: {q.Text}");
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"Correct Answer: {q.RightAnswer}");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Wrong answer #1: {q.WrongAnswer1}");
-                        Console.WriteLine($"Wrong answer #2: {q.WrongAnswer2}");
-                        Console.WriteLine($"Wrong answer #3: {q.WrongAnswer3}");
-                        Console.ResetColor();
-                        Console.WriteLine("Press 1 to approve ,Press 2 to reject, Press 3 to skip, Press 4 to exit");
-                        // printing text
-                        while (x == '5')
+                        char x = 'x'; //an index that will be changed back to '5' if a wrong value is entered
+                        if (q.StatusId == 2)
                         {
-                            x = Console.ReadKey().KeyChar;
-                            if (x == '1')
-                                q.StatusId = 1;
-                            else if (x == '2')
-                                q.StatusId = 3;
-                            else if (x == '3')
-                                q.StatusId = 2;
-                            else if (x == '4')
+                            ClearScreenAndSetTitle("Pending Questions         ");
+                            Console.WriteLine($"Question: {q.Text}");
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"Correct Answer: {q.RightAnswer}");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"Wrong answer #1: {q.WrongAnswer1}");
+                            Console.WriteLine($"Wrong answer #2: {q.WrongAnswer2}");
+                            Console.WriteLine($"Wrong answer #3: {q.WrongAnswer3}");
+                            Console.ResetColor();
+                            Console.WriteLine("Press 1 to approve ,Press 2 to reject, Press 3 to skip, Press 4 to exit");
+                            // printing text
+                            while (x != '1' || x != '2' || x != '3' || x != '4')
                             {
-                                context.SaveChanges();
-                                return;
+                                x = Console.ReadKey().KeyChar;
                             }
-                            else x = '5';
+                                if (x == '1')
+                                    q.StatusId = 1;
+                                else if (x == '2')
+                                    q.StatusId = 2;
+                                else if (x == '3')
+                                    q.StatusId = 3;
+                                else if (x == '4')
+                                {
+                                    context.SaveChanges();
+                                    return;
+                                }
+                                
 
-                        } // switch statement for approval options
+
+                             // switch statement for approval options
 
 
+                        }
                     }
-                }
                 context.SaveChanges();
             }
             else

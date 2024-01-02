@@ -47,5 +47,53 @@ namespace Trivia_Stage1.Models
             int q = rand.Next(0, this.Questions.Count());
             return this.Questions.Where(x => x.Id == q).First();
         }
+        public bool AddQ(Question q)
+        {
+            try
+            {
+                this.Questions.Add(q);
+
+                this.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("an eror has aquered Quistion wan't be added point wont be removed ");
+                if (this.Questions.Contains(q))
+                    this.Questions.Remove(q);
+                return false;
+            }
+        }
+        public void RemovePoint(User user, Question q)
+        {
+
+            try
+            {
+                if (user.Points != null)
+                    user.Points = 0;
+                if (user.Questionsadded != null)
+                    user.Questionsadded++;
+                this.Users.Update(user);
+                this.SaveChanges();
+                return;
+            }
+            catch (Exception ex)
+            {
+                if (this.Questions.Contains(q))
+                    this.Questions.Remove(q);
+                if (user.Points != null)
+                    user.Points = 100;
+                if (user.Questionsadded != null)
+                    user.Questionsadded--;
+                this.Users.Update(user);
+                user.Questions.Add(q);
+                this.SaveChanges();
+                return;
+                Console.WriteLine("an eror has aquered Quistion wan't be added point wont be removed ");
+            }
+            this.SaveChanges();
+        }
+
+
     }
 }
