@@ -6,7 +6,7 @@ namespace Trivia_Stage1.UI
 {
     class SignupScreen : Screen
     {
-        public SignupScreen() : base("Signup")
+        public SignupScreen() : base("Signup     ")
         {
 
         }
