@@ -17,7 +17,7 @@ namespace Trivia_Stage1.Models
             }
             catch (Exception ex)
             {
-                throw new Exception("Couldn't connect to server");
+                throw ex;// new Exception("Couldn't connect to server");
             }
         }
         public User? GetUserByEmailAndPassword(string email, string password)

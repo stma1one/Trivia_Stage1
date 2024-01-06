@@ -192,7 +192,12 @@ namespace Trivia_Stage1.UI
                     y = Console.ReadKey().KeyChar;
                     if (1 <= y && y <= 5)
                         q.SubjectId = y;
-                    else y = '0';
+                    else
+                    {
+                        Console.WriteLine("choose a valid Option");
+                        y = '0';
+                    }
+                    
                 } // choosing a subject
                 Console.WriteLine();
                 string? x ;
@@ -283,37 +288,49 @@ namespace Trivia_Stage1.UI
                             Console.ResetColor();
                             Console.WriteLine("Press 1 to approve ,Press 2 to reject, Press 3 to skip, Press 4 to exit");
                             // printing text
-                            while (x != '1' || x != '2' || x != '3' || x != '4')
-                            {  
-                                    x = Console.ReadKey().KeyChar;
-                            }
-                            if(x==4)
+
+                            while (!(x == '1' || x == '2' || x == '3' || x == '4'))
                             {
-                                context.SaveChanges();
-                                return;
+                                x= Console.ReadKey().KeyChar;
+                                Console.WriteLine();
                             }
-                            q.StatusId = x;
-                           
-                                
+
+                                if (x == '1')
+                                {
+                                    q.StatusId = 1;
+                                }
+                                if (x == '2')
+                                    q.StatusId = 3;
+
+                                if (x == '4')
+                                {
+                                    context.SaveChanges();
+                                    return;
+                                }
 
 
-                             // switch statement for approval options
 
 
+
+                                // switch statement for approval options
+
+
+                            
                         }
+                       
+                        context.SaveChanges();
                     }
-                context.SaveChanges();
+                else
+                {
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{"You do not have permission to view this page",80}");
+                    Console.WriteLine();
+                    Console.ResetColor();
+                    Console.WriteLine("Press any key to continue");
+                    Console.ReadKey();
+                } // no permission
             }
-            else
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"{"You do not have permission to view this page",80}");
-                Console.WriteLine();
-                Console.ResetColor();
-                Console.WriteLine("Press any key to continue");
-                Console.ReadKey();
-            } // no permission
         }
         public void ShowGame()
         {
