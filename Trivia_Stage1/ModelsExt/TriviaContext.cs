@@ -56,7 +56,7 @@ namespace Trivia_Stage1.Models
                 this.SaveChanges();
                 return true;
             }
-            catch (Exception ex)
+            catch 
             {
                 Console.WriteLine("an eror has aquered Quistion wan't be added point wont be removed ");
                 if (this.Questions.Contains(q))
@@ -64,7 +64,7 @@ namespace Trivia_Stage1.Models
                 return false;
             }
         }
-        public void RemovePoint(User user, Question q)
+        public bool EditUser(User user, Question q)
         {
 
             try
@@ -75,9 +75,9 @@ namespace Trivia_Stage1.Models
                     user.Questionsadded++;
                 this.Users.Update(user);
                 this.SaveChanges();
-                return;
+                return true;
             }
-            catch (Exception ex)
+            catch
             {
                 if (this.Questions.Contains(q))
                     this.Questions.Remove(q);
@@ -88,10 +88,10 @@ namespace Trivia_Stage1.Models
                 this.Users.Update(user);
                 user.Questions.Add(q);
                 this.SaveChanges();
-                return;
-                Console.WriteLine("an eror has aquered Quistion wan't be added point wont be removed ");
+                return false;
+                
             }
-            this.SaveChanges();
+            
         }
 
 

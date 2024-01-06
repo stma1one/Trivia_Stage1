@@ -172,7 +172,13 @@ namespace Trivia_Stage1.UI
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.Write("Add the question's text (B to go back): ");
                 Console.ResetColor();
-                string qText = Console.ReadLine();
+                string? qText = Console.ReadLine();
+                while (qText == null)
+                {
+                    Console.WriteLine("please write something");
+                    qText= Console.ReadLine();
+                }
+
                 Question q = new Question();
                 if (qText.ToUpper() == "B")
                     return;
@@ -189,34 +195,58 @@ namespace Trivia_Stage1.UI
                     else y = '0';
                 } // choosing a subject
                 Console.WriteLine();
-                string x;
+                string? x ;
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Add the correct answer: ");
                 Console.ResetColor();
                 x = Console.ReadLine();
+                while(x ==null )
+                {
+                    Console.WriteLine( "please write something");
+                    x = Console.ReadLine();
+                }
+
                 q.RightAnswer = x;
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("Add wrong answer #1: ");
                 Console.ResetColor();
                 x = Console.ReadLine();
+                while (x == null)
+                {
+                    Console.WriteLine("please write something");
+                    x = Console.ReadLine();
+                }
                 q.WrongAnswer1 = x;
+
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("Add wrong answer #2: ");
                 Console.ResetColor();
                 x = Console.ReadLine();
+                while (x == null)
+                {
+                    Console.WriteLine("please write something");
+                    x = Console.ReadLine();
+                }
                 q.WrongAnswer2 = x;
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("Add wrong answer #3: ");
                 Console.ResetColor();
                 x = Console.ReadLine();
+                while (x == null)
+                {
+                    Console.WriteLine("please write something");
+                    x = Console.ReadLine();
+                }
                 q.WrongAnswer3 = x;
                 q.StatusId = 2;
                 q.UserId = LoggedUser.Id;
                 if (context.AddQ(q))
                 {//adds question to db and retuns true if it worked
-                    context.RemovePoint(LoggedUser, q);//removes  point add 1 to Qcount
+                    if(!context.EditUser(LoggedUser, q))//removes  point add 1 to Qcount
+                        Console.WriteLine("an eror has aquered Quistion wan't be added point wont be removed ");
 
                 }
+                else Console.WriteLine("an eror has aquered Quistion wan't be added point wont be removed ");
                 // adds question to db
 
             }
@@ -254,20 +284,16 @@ namespace Trivia_Stage1.UI
                             Console.WriteLine("Press 1 to approve ,Press 2 to reject, Press 3 to skip, Press 4 to exit");
                             // printing text
                             while (x != '1' || x != '2' || x != '3' || x != '4')
-                            {
-                                x = Console.ReadKey().KeyChar;
+                            {  
+                                    x = Console.ReadKey().KeyChar;
                             }
-                                if (x == '1')
-                                    q.StatusId = 1;
-                                else if (x == '2')
-                                    q.StatusId = 2;
-                                else if (x == '3')
-                                    q.StatusId = 3;
-                                else if (x == '4')
-                                {
-                                    context.SaveChanges();
-                                    return;
-                                }
+                            if(x==4)
+                            {
+                                context.SaveChanges();
+                                return;
+                            }
+                            q.StatusId = x;
+                           
                                 
 
 
